@@ -1,0 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/29 16:11:09 by kaisuzuk          #+#    #+#             */
+/*   Updated: 2025/07/01 14:00:50 by kaisuzuk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <pipex.h>
+
+t_bool	parse_bonus(int argc, char *argv[]);
+
+
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	if (!parse_bonus(argc, argv))
+		return (1); // エラーメッセージ考える
+	
+}
