@@ -6,14 +6,16 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 13:45:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/01 14:00:03 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/01 22:04:10 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "pipex.h"
 
 t_bool parse_bonus(int argc, char *argv[])
 {
+	(void)argv; // とりあえずね
 	if (argc < 5)
-		return (1); // 終了メッセージ考える
+		return (FALSE); // 終了メッセージ考える
+	return (TRUE);
 }

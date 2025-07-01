@@ -1,15 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_pipeline.c                                 :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/01 14:06:45 by kaisuzuk         ###   ########.fr       */
+/*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
+/*   Updated: 2025/07/01 22:37:46 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int execute_pipeline()
+
+//環境変数とクォートで囲まれた文字列のケース
+char **make_command(char *arg)
+{
+	char **cmd;
+	
+	cmd = ft_split(arg, ' ');
+	if (!cmd)
+		return (NULL); // エラー処理考えようね
+	return (cmd);
+}

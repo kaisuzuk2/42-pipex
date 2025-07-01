@@ -6,20 +6,28 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/01 13:56:30 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/01 22:39:39 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	pipex
 CC		=	cc
 FLAG	=	-Wall -Werror -Wextra
+INC		=	-Iincludes
 
-
-SRCS	=	
-INC		=	-I$(FT_NAME)/includes
+_SRCS	=	execute_pipeline_bonus.c\
+			parse_bonus.c\
+			redir_bonus.c\
+			utils_bonus.c 
+			
+SRCS	=	$(addprefix src/, $(_SRCS))
+OBJS	=	$(SRCS:.c=.o)
+MAIN	=	main_bonus.c
+INC		+=	-I$(FT_NAME)/includes
+INC		+= -I$(FT_NAME)/libft
 
 FT_NAME	=	libftprintf
-FT_URL	=	git@vogsphere-v2.42tokyo.jp:vogsphere/intra-uuid-0303fe47-4568-4e00-ad9b-75f1c67325a9-6537121-kaisuzuk
+FT_URL	=	https://github.com/kaisuzuk2/42-printf.git
 
 
 MAKE	=	make -C
@@ -29,15 +37,22 @@ all: $(NAME)
 
 $(NAME): $(FT_NAME) $(OBJS)
 	$(MAKE) $(FT_NAME)
-	$(CC) -o $(NAME) $(FLAG) $(OBJS) -L$(FT_NAME) -l$(FT_NAME)
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf
 	
 
 %.o: %.c
 	$(CC) -c $(FLAG) $(INC) $< -o $@
 
+clean: 
+	$(RM) $(FT_NAME)
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
 
 $(FT_NAME): 
 	git clone $(FT_URL) $(FT_NAME)
 
+.PHONY: clean fclean 
 
 
