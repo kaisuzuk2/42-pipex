@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:11:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/02 13:15:36 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:13:12 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	main(int argc, char *argv[], char *envp[])
 	int	pipe_in;
 	int	pipe_out;
 
-	if (!parse_bonus(argc, argv))
-		return (1); // エラーメッセージ考える
+	// if (!parse_bonus(argc, argv))
+	// 	return (1);  // なにか出力させよう
 	do_redirection(&pipe_in, &pipe_out, argv[1], argv[argc - 1]);
 	execute_pipeline(argv, envp, 2, argc -2, pipe_in, pipe_out);
 }

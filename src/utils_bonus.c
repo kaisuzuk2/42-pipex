@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/02 00:16:18 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:13:55 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ char *search_for_command(char *arg, char *envp[])
 	char **path;
 	int i;
 	char *full_path;
-	int res;
 	
 	if (absolute_program(arg))
 		return (arg);
@@ -70,16 +69,29 @@ char *search_for_command(char *arg, char *envp[])
 		full_path = join_path_element(path[i], arg);
 		if (!full_path)
 			return (NULL); // なやましい
-		res = access(full_path, X_OK);
-		if (!res)
+		// if ()
+		// {
+		// 	res = access(full_path, X_OK);
+		// }
+		// if (!res)
+		// {
+		// 	free(path); // これ二次元配列だから開放できてないよ
+		// 	return (full_path);
+		// }
+		if (!access(full_path, F_OK))
 		{
-			free(path); // これ二次元配列だから開放できてないよ
-			return (full_path);
+			if (!access(full_path, X_OK))
+			{
+				free(path); // ちゃんと開放しようね
+				return (full_path);
+			}
 		}
 		i++;
 	}
+	// エラーメッセージをbashかzshどちらに合わせるのか考えよう
 	free(path); // ここもね
 	return (NULL);
+	
 }
 
 //環境変数とクォートで囲まれた文字列のケース

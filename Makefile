@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/02 13:12:35 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/02 18:01:20 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,9 +50,11 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 
+re: fclean all
+
 $(FT_NAME):
 	git clone $(FT_URL) $(FT_NAME)
 
-.PHONY: clean fclean 
+.PHONY: clean fclean re
 
 

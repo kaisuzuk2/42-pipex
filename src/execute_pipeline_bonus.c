@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/02 13:49:28 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/02 18:00:15 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,16 @@ int execute_pipeline(char *argv[], char *envp[], int cmd_start, int cmd_end, int
 				dup2(fd[1], 1);
 				close(fd[1]);	
 			}
-			prev_fd = fd[0];
 			cmd = make_command(argv[cmd_start]);
 			execve(search_for_command(cmd[0], envp), &cmd[0], envp);	
 			perror("execve");
 			exit(1);	
 		}
+		if (cmd_start != cmd_end)
+			close(fd[1]);
+		prev_fd = fd[0];
 		cmd_start++;
 	}
+	wait(NULL);
 	return (1); // とりあえずね
 }
