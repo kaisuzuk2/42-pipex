@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/01 23:15:47 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/02 13:12:35 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ RM		=	rm -rf
 
 all: $(NAME)
 
-$(NAME): $(FT_NAME) $(OBJS)
+$(NAME): $(FT_NAME) $(OBJS) $(MAIN)
 	$(MAKE) $(FT_NAME)
 	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf
 	

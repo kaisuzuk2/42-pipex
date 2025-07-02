@@ -6,11 +6,14 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:11:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/01 22:38:49 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:15:36 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+
+#include <stdio.h>
 
 t_bool	parse_bonus(int argc, char *argv[]);
 int		execute_pipeline(char *argv[], char *envp[], int cmd_start,
