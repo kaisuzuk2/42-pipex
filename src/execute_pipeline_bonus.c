@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/04 22:26:10 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/05 00:37:27 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	execute_disk_command(int pipe_in, int pipe_out, char *argv[], char *
 		cmd_path = search_for_command(cmd[0], envp);
 		if (!cmd_path)
 			exit(1);
-		execve(search_for_command(cmd[0], envp), &cmd[0], envp);
+		execve(cmd_path, &cmd[0], envp);
 		perror("execve");
 		exit(1);
 	}
@@ -66,22 +66,21 @@ int	execute_pipeline(char *argv[], char *envp[], int cmd_start, int cmd_end,
 	int		prev_fd;
 
 	prev_fd = pipe_in;
-	close(pipe_in);
 	while (cmd_start <= cmd_end)
 	{
 		if (cmd_start < cmd_end)
 			pipe(fildes);
-		if (execute_simple_command(pipe_in, pipe_out, argv, envp, cmd_start))
-			continue;
 		if (cmd_start == cmd_end)
 		{
-			execute_disk_command(pipe_in, pipe_out, argv, envp, cmd_start);
-			// close(pipe_out);
+			execute_simple_command(prev_fd, pipe_out, argv, envp, cmd_start);
+			close(pipe_out);
+			close(prev_fd);
 		}
 		else
 		{
-			execute_disk_command(pipe_in, fildes[1], argv, envp, cmd_start);
-			// close(fildes[1]);
+			execute_simple_command(prev_fd, fildes[1], argv, envp, cmd_start);
+			close(fildes[1]);
+			close(prev_fd);
 		}
 		prev_fd = fildes[0];
 		cmd_start++;
