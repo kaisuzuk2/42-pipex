@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   findcmd_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/02 19:13:55 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/04 22:21:39 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// 引数がすでにpathかどうかの処理 
-static t_bool absolute_program(char *arg)
+static int absolute_program(char *arg)
 {
-	if (ft_strchr(arg, '/') != NULL)
-		return (TRUE);
-	return (FALSE);
+	return (ft_strchr(arg, '/') != NULL);
 }
 
 static char *join_path_element(char *dir, char *arg)
@@ -58,26 +55,21 @@ char *search_for_command(char *arg, char *envp[])
 	
 	if (absolute_program(arg))
 		return (arg);
-	if (!path_line)
-		return (NULL); //エラー処理考えようね
 	path = ft_split(path_line, ':');
 	if (!path)
-		return (NULL); //　どうしようね
+	{
+		ft_printf("%s: cannot malloc\n", arg); // fprintf作ろうね
+		return (NULL);
+	} 
 	i = 0;
 	while (path[i])
 	{
 		full_path = join_path_element(path[i], arg);
 		if (!full_path)
-			return (NULL); // なやましい
-		// if ()
-		// {
-		// 	res = access(full_path, X_OK);
-		// }
-		// if (!res)
-		// {
-		// 	free(path); // これ二次元配列だから開放できてないよ
-		// 	return (full_path);
-		// }
+		{
+			ft_printf("%s: cannot malloc\n", arg); // fprintf作ろうね
+			return (NULL);
+		}
 		if (!access(full_path, F_OK))
 		{
 			if (!access(full_path, X_OK))
@@ -90,17 +82,7 @@ char *search_for_command(char *arg, char *envp[])
 	}
 	// エラーメッセージをbashかzshどちらに合わせるのか考えよう
 	free(path); // ここもね
+	ft_printf("%s: command not found", arg);
 	return (NULL);
 	
-}
-
-//環境変数とクォートで囲まれた文字列のケース
-char **make_command(char *arg)
-{
-	char **cmd;
-	
-	cmd = ft_split(arg, ' ');
-	if (!cmd)
-		return (NULL); // エラー処理考えようね
-	return (cmd);
 }

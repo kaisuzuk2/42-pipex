@@ -1,0 +1,9 @@
+total 36
+-rw-r--r-- 1 kaisuzuk 2025_tokyo  1665  7月  4 15:12 Makefile
+drwxr-xr-x 2 kaisuzuk 2025_tokyo    21  6月 29 16:08 includes
+-rw-r--r-- 1 kaisuzuk 2025_tokyo    12  7月  2 22:24 infile
+drwxr-xr-x 7 kaisuzuk 2025_tokyo   109  7月  4 22:26 libftprintf
+-rw-r--r-- 1 kaisuzuk 2025_tokyo  1460  7月  4 16:51 main_bonus.c
+-rw-r--r-- 1 kaisuzuk 2025_tokyo     0  7月  4 22:26 outfile
+-rwxr-xr-x 1 kaisuzuk 2025_tokyo 22672  7月  4 22:26 pipex
+drwxr-xr-x 2 kaisuzuk 2025_tokyo   269  7月  4 22:26 src
