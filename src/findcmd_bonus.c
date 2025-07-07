@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/06 14:12:19 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:19:52 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,10 @@ t_bool	executable_file(char *full_path)
 	return (FALSE);
 }
 
-static char *find_user_command_in_path(char *arg, char *envp[],
-		const char **path)
+static char	*find_user_command_in_path(char *arg, char **path)
 {
-	char *full_path;
-	int	i;
+	char	*full_path;
+	int		i;
 
 	i = 0;
 	while (path[i])
@@ -98,8 +97,8 @@ static char *find_user_command_in_path(char *arg, char *envp[],
 		full_path = join_path_element(path[i], arg);
 		if (!full_path)
 		{
-			ft_dprintf(stderr_fd, "pipex: cannot malloc\n")
-			break;
+			ft_dprintf(stderr_fd, "pipex: cannot malloc\n");
+			break ;
 		}
 		if (executable_file(full_path))
 			break ;
@@ -115,16 +114,17 @@ static char *find_user_command_in_path(char *arg, char *envp[],
 
 char	*search_for_command(char *arg, char *envp[])
 {
-	const char **path = ft_split(get_path_line(envp), ':');
+	char **path;
 	int i;
 	char *full_path;
 
 	if (absolute_program(arg))
 		return (check_absolute_program(arg));
+	path = ft_split(get_path_line(envp), ':');
 	if (!path)
 		return (ft_dprintf(stderr_fd, "%s: cannot malloc\n", arg), NULL);
 	i = 0;
-	full_path = find_user_command_in_path(arg, envp, path);
+	full_path = find_user_command_in_path(arg, path);
 	free_path(path);
 	if (full_path)
 		return (full_path);

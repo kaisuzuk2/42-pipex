@@ -6,12 +6,14 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/05 23:35:55 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:32:09 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex.h"
+
+static int here_document_to_fd()
 
 t_bool do_redirection(int *pipe_in, int *pipe_out, const char *infile, const char *outfile)
 {

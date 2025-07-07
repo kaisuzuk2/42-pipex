@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:12:02 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/04 22:23:54 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:44:24 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ char **make_command(char *arg)
 // strcmp作ろうね
 t_bool is_builtin(char *cmd)
 {
-	if (!ft_strncmp(cmd, "cd", 2))
+	if (!ft_strcmp(cmd, "cd"))
 		return (TRUE);
-	else if (!ft_strncmp(cmd, "export", 6))
+	else if (!ft_strcmp(cmd, "export"))
 		return (TRUE);
-	else if (!ft_strncmp(cmd, "unset", 5))
+	else if (!ft_strcmp(cmd, "unset"))
 		return (TRUE);
-	else if (!ft_strncmp(cmd, "exit", 4))
+	else if (!ft_strcmp(cmd, "exit"))
 		return (TRUE);
 	return (FALSE);
 }

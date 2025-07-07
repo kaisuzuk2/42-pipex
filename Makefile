@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/05 20:06:31 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/08 00:02:37 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,21 +24,28 @@ _SRCS	=	execute_pipeline_bonus.c\
 SRCS	=	$(addprefix src/, $(_SRCS))
 OBJS	=	$(SRCS:.c=.o)
 MAIN	=	main_bonus.c
-INC		+=	-I$(FT_NAME)/includes
-INC		+= -I$(FT_NAME)/libft
 
 FT_NAME	=	libftprintf
 FT_URL	=	https://github.com/kaisuzuk2/ft_dprintf.git
+INC		+=	-I$(FT_NAME)/includes
+INC		+= 	-I$(FT_NAME)/libft
+# INC		+=	-L$(FT_NAME)
+# INC		+=	-lftprintf
 
+GNL_NAME	=	libgnl
+GNL_URL		=	https://github.com/kaisuzuk2/42-get_next_line.git
+# INC		+=	-I$(GNL_NAME)
+# INC		+=	-lgnl
 
 MAKE	=	make -C
 RM		=	rm -rf
 
 all: $(NAME)
 
-$(NAME): $(FT_NAME) $(OBJS) $(MAIN)
+$(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
 	$(MAKE) $(FT_NAME)
-	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf
+	$(MAKE) $(GNL_NAME)
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 	
 
 %.o: %.c
@@ -46,6 +53,7 @@ $(NAME): $(FT_NAME) $(OBJS) $(MAIN)
 
 clean: 
 	$(RM) $(FT_NAME)
+	$(RM) $(GNL_NAME)
 	$(RM) $(OBJS)
 
 fclean: clean
@@ -55,6 +63,9 @@ re: fclean all
 
 $(FT_NAME):
 	git clone $(FT_URL) $(FT_NAME)
+
+$(GNL_NAME):
+	git clone $(GNL_URL) $(GNL_NAME)
 
 .PHONY: clean fclean re
 

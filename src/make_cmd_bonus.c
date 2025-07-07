@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_bonus.c                                      :+:      :+:    :+:   */
+/*   make_cmd_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 13:45:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/06 19:20:40 by kaisuzuk         ###   ########.fr       */
+/*   Created: 2025/07/06 19:05:23 by kaisuzuk          #+#    #+#             */
+/*   Updated: 2025/07/07 18:07:53 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
 
-t_bool parse_bonus(int argc, char *argv[])
+#include "pipex.h"
+// read one line
+// 
+char *make_here_document(char *here_doc_eof)
 {
-	(void)argv; // とりあえずね
-	if (argc < 5)
-		return (FALSE); // 終了メッセージ考える
-	return (TRUE);
+	
 }

@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:08:48 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/05 23:49:26 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:33:09 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ typedef int	t_bool;
 
 # define stderr_fd 2
 
+typedef struct s_cmd
+{
+	char **cmd;
+	
+} t_cmd;
+
 typedef struct s_command
 {
 	char	*prog_name;
@@ -35,11 +41,19 @@ typedef struct s_command
 	int		cmd_size;
 }			t_command;
 
+
 typedef struct s_pipefd
 {
 	int pipe_in;
 	int pipe_out;
 } t_pipefd;
+
+
+// typedef struct s_redirect {
+// 	char *word;
+// 	char *here_doc_eof;
+	
+// } t_redirect;
 
 // utils_bonus.c
 t_bool		is_builtin(char *cmd);
