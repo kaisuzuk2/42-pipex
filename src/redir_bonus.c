@@ -6,29 +6,51 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/06 15:32:09 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/10 01:08:09 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex.h"
 
-static int here_document_to_fd()
-
-t_bool do_redirection(int *pipe_in, int *pipe_out, const char *infile, const char *outfile)
+int  here_document_to_fd(t_redirect *r)
 {
-	*pipe_in = open(infile, O_RDONLY);
-	if (*pipe_in == -1)
+	int herepipe[2];
+	
+	pipe(herepipe);
+	if (!r->document)
+		return (FALSE); // これは/dev/nullっぽいね
+	// dup2(herepipe[1], 1);
+	ft_putstr_fd(r->document, herepipe[1]); // 文字数が大きければファイルに一時書き込む
+	close(herepipe[1]);
+	return (herepipe[0]);
+}
+
+t_bool do_redirection(t_redirect *redirect)
+{
+	t_redirect *r;
+	int fd;
+
+	r = redirect;
+	while (r)
 	{
-		ft_dprintf(stderr_fd, "pipex: no such file or directory: %s", infile);
-		return (FALSE);
-	}
-	*pipe_out = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*pipe_out == -1)
-	{
-		close(*pipe_in);
-		ft_dprintf(stderr_fd, "pipex: no such file or directory: %s", outfile);
-		return (FALSE);
+		if (r->instruction == e_input_direction)
+		{
+			fd = open(r->filename, O_RDONLY);
+			if (fd == -1)
+				return (ft_dprintf(stderr_fd, "pipex: no such file or directory: %s", r->filename), FALSE);
+			dup2(fd, 0); // エラーチェック
+			close(fd);
+		}
+		else if (r->instruction == e_output_direction)
+		{
+			fd = open(r->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			if (fd == -1)
+				return (ft_dprintf(stderr_fd, "pipex: no such file or directory: %s", r->filename), FALSE);
+			dup2(fd, 1); // エラーチェック
+			close(fd);
+		}
+		r = r->next;
 	}
 	return (TRUE);
 }

@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/08 00:02:37 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/09 23:00:21 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,10 @@ _SRCS	=	execute_pipeline_bonus.c\
 			parse_bonus.c\
 			redir_bonus.c\
 			findcmd_bonus.c \
-			cmdutils_bonus.c
+			cmdutils_bonus.c \
+			cmdlst_bonus.c \
+			make_cmd_bonus.c \
+			dispose_cmd_bonus.c
 			
 SRCS	=	$(addprefix src/, $(_SRCS))
 OBJS	=	$(SRCS:.c=.o)
@@ -36,6 +39,7 @@ GNL_NAME	=	libgnl
 GNL_URL		=	https://github.com/kaisuzuk2/42-get_next_line.git
 # INC		+=	-I$(GNL_NAME)
 # INC		+=	-lgnl
+INC		+=	-I$(GNL_NAME)
 
 MAKE	=	make -C
 RM		=	rm -rf
