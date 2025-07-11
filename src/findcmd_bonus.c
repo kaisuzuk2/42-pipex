@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/09 22:55:03 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/12 00:38:31 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ static char	*check_absolute_program(char *arg)
 {
 	if (access(arg, F_OK))
 	{
-		ft_dprintf(stderr_fd, "pipex: command not found\n");
+		ft_dprintf(STDERR_FILENO, "pipex: command not found\n");
 		return (NULL);
 	}
 	if (access(arg, X_OK))
 	{
-		ft_dprintf(stderr_fd, "pipex: permission denied: %s\n", arg);
+		ft_dprintf(STDERR_FILENO, "pipex: permission denied: %s\n", arg);
 		return (NULL);
 	}
 	return (arg);
@@ -97,7 +97,7 @@ static char	*find_user_command_in_path(char *arg, char **path)
 		full_path = join_path_element(path[i], arg);
 		if (!full_path)
 		{
-			ft_dprintf(stderr_fd, "pipex: cannot malloc\n");
+			ft_dprintf(STDERR_FILENO, "pipex: cannot malloc\n");
 			break ;
 		}
 		if (executable_file(full_path))
@@ -122,12 +122,12 @@ char	*search_for_command(char *arg, char *envp[])
 		return (check_absolute_program(arg));
 	path = ft_split(get_path_line(envp), ':');
 	if (!path)
-		return (ft_dprintf(stderr_fd, "%s: cannot malloc\n", arg), NULL);
+		return (ft_dprintf(STDERR_FILENO, "%s: cannot malloc\n", arg), NULL);
 	i = 0;
 	full_path = find_user_command_in_path(arg, path);
 	free_path(path);
 	if (full_path)
 		return (full_path);
-	ft_dprintf(stderr_fd, "%s: command not found", arg);
+	ft_dprintf(STDERR_FILENO, "%s: command not found", arg);
 	return (NULL);
 }

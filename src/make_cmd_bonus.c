@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:05:23 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/10 15:39:13 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/12 00:39:36 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char *make_here_document(char *here_doc_eof)
 	document = NULL;
 	while (1)
 	{
-		ft_dprintf(stdout_fd, "> ");
+		ft_dprintf(STDOUT_FILENO, "> ");
 		buf = get_next_line(0);
 		if (!buf)
 			break;

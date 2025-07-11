@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:08:48 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/10 16:32:45 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/12 00:40:21 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-
 # ifndef HEREDOC_PIPESIZE
 #  ifdef PIPE_BUF
 #   define HEREDOC_PIPESIZE PIPE_BUF
@@ -31,12 +30,12 @@
 #  endif
 # endif
 
+# define MIN_ARG 5
+# define MIN_HEREDOC_ARG 6
+
 typedef int				t_bool;
 # define TRUE 1
 # define FALSE 0
-
-# define stderr_fd 2
-# define stdout_fd 1
 
 enum					e_instruction
 {
@@ -74,8 +73,12 @@ typedef struct s_pipefd
 
 // } t_redirect;
 
+// ft_mkstemp.c
+int						ft_mkstemp(char *template);
+
 // parse_bonus.c
 t_command				*parse(int argc, char **argv);
+t_bool					args_check(int argc, char **argv);
 
 // utils_bonus.c
 t_bool					is_builtin(char *cmd);
@@ -89,9 +92,10 @@ int						here_document_to_fd(t_redirect *r);
 
 // make_cmd_bonus.c
 char					*make_here_document(char *here_doc_eof);
+void					heredoc_expand(t_redirect *r, size_t *lenp);
 
 // cmdlst_bonus.c
-t_command				*cmdlstnew(char *prog_name, char *cmds);
+t_command				*cmdnew(char *prog_name, char *cmds);
 t_command				*set_redirect(t_command *c, enum e_instruction inst,
 							char *here_doc_eof, char *filename);
 void					cmdlst_add_back(t_command *head, t_command *new);

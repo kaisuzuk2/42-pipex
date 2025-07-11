@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/10 01:06:37 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/12 00:34:05 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	do_piping(int pipe_in, int pipe_out)
 	}
 }
 
+// do external command
 static void	execute_disk_command(t_command *cmd, char *envp[])
 {
 	char	*cmd_path;
@@ -87,7 +88,7 @@ static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
 		}
 		if (builtin)
 		{
-			ft_dprintf(stderr_fd,
+			ft_dprintf(STDERR_FILENO,
 				"%s: '%s' is a shell built-in and is not supported.\n",
 				cmd->prog_name, cmd->cmdv[0]);
 			exit(1);

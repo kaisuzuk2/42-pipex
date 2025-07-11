@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 17:17:38 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/11 17:39:13 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/11 21:18:40 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static t_bool is_noexist(char *filename)
 
 int ft_mkstemp(char *template)
 {
-	int fd;
 	int i;
 	char *filename;
 	char *addnum;
@@ -33,10 +32,15 @@ int ft_mkstemp(char *template)
 		addnum = ft_itoa(i);
 		filename = ft_strjoin(template, addnum);
 		if (is_noexist(filename))
-			return (open(filename, O_RDWR|O_CREAT|O_EXCL, 0600)); // なんでrdwrなんかよくわからん　書き込みだけでよくね？
+		{
+			template = filename;
+			return (open(filename, O_RDWR|O_CREAT|O_EXCL, 0600));
+		} // なんでrdwrなんかよくわからん　書き込みだけでよくね？
 		free(addnum);
 		free(filename);
 		i++;			
 	}
+	free(template);
+	template = NULL;
 	return (-1);
 }

@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/09 23:00:21 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/11 21:18:20 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ FLAG	=	-Wall -Werror -Wextra
 INC		=	-Iincludes
 
 _SRCS	=	execute_pipeline_bonus.c\
+			ft_mkstemp.c \
 			parse_bonus.c\
 			redir_bonus.c\
 			findcmd_bonus.c \
