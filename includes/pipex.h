@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:08:48 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/10 00:52:24 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/10 16:32:45 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,20 @@
 # include "ft_printf.h"
 # include "get_next_line.h"
 # include <fcntl.h>
+# include <limits.h>
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+
+# ifndef HEREDOC_PIPESIZE
+#  ifdef PIPE_BUF
+#   define HEREDOC_PIPESIZE PIPE_BUF
+#  else
+#   define HEREDOC_PIPESIZE 4096
+#  endif
+# endif
 
 typedef int				t_bool;
 # define TRUE 1
@@ -75,7 +85,7 @@ char					*search_for_command(char *arg, char *envp[]);
 
 // redir_bonus.c
 t_bool					do_redirection(t_redirect *redirect);
-int					here_document_to_fd(t_redirect *r);
+int						here_document_to_fd(t_redirect *r);
 
 // make_cmd_bonus.c
 char					*make_here_document(char *here_doc_eof);

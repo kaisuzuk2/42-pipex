@@ -6,13 +6,19 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:05:23 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/10 01:10:28 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:39:13 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex.h"
 // read one line
+
+// 環境変数の展開と文字数を返す
+void heredoc_expand(t_redirect *r, size_t *lenp)
+{
+	*lenp = ft_strlen(r->document);
+}
 
 char *make_here_document(char *here_doc_eof)
 {
