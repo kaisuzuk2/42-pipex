@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/12 00:30:29 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/12 14:07:30 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void cmdlst_add_back(t_command *head, t_command *new)
 	tmp->next = new;
 }
 
-// e_instructionでどっちかわかるから、文字列は同じ引数で受け取りましょうね
-t_command *set_redirect(t_command *c, enum e_instruction inst, char *here_doc_eof, char *filename)
+t_command *set_redirect(t_command *c, enum e_instruction inst, char *filename_eof)
 {
 	t_redirect *r;
 
@@ -49,9 +48,9 @@ t_command *set_redirect(t_command *c, enum e_instruction inst, char *here_doc_eo
 	if (!r)
 		return (NULL);
 	if (inst == e_output_direction || inst == e_input_direction)
-		set_fileredirect(r, inst, filename);
+		set_fileredirect(r, inst, filename_eof);
 	else if (inst == e_reading_until)
-		set_here_doc(r, inst, here_doc_eof);
+		set_here_doc(r, inst, filename_eof);
 	else
 		r = NULL;
 	c->redirect = r;

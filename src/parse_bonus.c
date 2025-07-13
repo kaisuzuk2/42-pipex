@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 13:45:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/12 00:42:49 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/12 14:06:55 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ static t_command	*first_command(char *prog_name, char **cmdv, char *cmd, char *f
 		return (NULL);
 	if (is_here_doc(cmdv[1]))
 	{
-		if (!set_redirect(new_cmd, e_reading_until,	filename_eof, NULL))
+		if (!set_redirect(new_cmd, e_reading_until,	filename_eof))
 			return (NULL);
 	}
 	else
 	{
-		if (!set_redirect(new_cmd, e_input_direction, NULL, filename_eof))
+		if (!set_redirect(new_cmd, e_input_direction, filename_eof))
 			return (NULL);
 	}
 	return (new_cmd);
@@ -65,7 +65,7 @@ static t_command	*last_command(char *prog_name, char *cmd, char *filename)
 	new_cmd = cmdnew(prog_name, cmd);
 	if (!new_cmd)
 		return (NULL);
-	if (!set_redirect(new_cmd, e_output_direction, NULL, filename))
+	if (!set_redirect(new_cmd, e_output_direction, filename))
 		return (NULL);
 	return (new_cmd);
 	

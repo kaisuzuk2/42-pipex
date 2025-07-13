@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/11 21:18:20 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/12 14:26:50 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,14 +16,15 @@ FLAG	=	-Wall -Werror -Wextra
 INC		=	-Iincludes
 
 _SRCS	=	execute_pipeline_bonus.c\
-			ft_mkstemp.c \
+			ft_mkstemp_bonus.c \
 			parse_bonus.c\
 			redir_bonus.c\
 			findcmd_bonus.c \
 			cmdutils_bonus.c \
 			cmdlst_bonus.c \
 			make_cmd_bonus.c \
-			dispose_cmd_bonus.c
+			dispose_cmd_bonus.c \
+			error_bonus.c
 			
 SRCS	=	$(addprefix src/, $(_SRCS))
 OBJS	=	$(SRCS:.c=.o)
