@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/12 14:26:50 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/15 23:39:25 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,16 @@ CC		=	cc
 FLAG	=	-Wall -Werror -Wextra
 INC		=	-Iincludes
 
+DEBUG	=	-g -fsanitize=address
+	
 _SRCS	=	execute_pipeline_bonus.c\
+			execute_pipeline_utils_bonus.c\
 			ft_mkstemp_bonus.c \
 			parse_bonus.c\
+			parse_utils_bonus.c\
 			redir_bonus.c\
 			findcmd_bonus.c \
+			findcmd_utils_bonus.c\
 			cmdutils_bonus.c \
 			cmdlst_bonus.c \
 			make_cmd_bonus.c \
@@ -51,11 +56,11 @@ all: $(NAME)
 $(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
 	$(MAKE) $(FT_NAME)
 	$(MAKE) $(GNL_NAME)
-	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	$(CC) -o $(NAME) $(DEBUG) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 	
 
 %.o: %.c
-	$(CC) -c $(FLAG) $(INC) $< -o $@
+	$(CC) -c $(DEBUG) $(FLAG) $(INC) $< -o $@
 
 clean: 
 	$(RM) $(FT_NAME)

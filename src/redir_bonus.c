@@ -6,17 +6,12 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/13 16:50:17 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/15 23:00:16 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// get_directory
-// make template-filename
-// make file by mkstemp
-// unlink
-// return fd
 int	sh_mktmpfd(const char *nameroot, char *filename)
 {
 	filename = ft_strjoin("tmp/", nameroot);
@@ -25,7 +20,7 @@ int	sh_mktmpfd(const char *nameroot, char *filename)
 	return (ft_mkstemp(filename));
 }
 
-int	here_document_to_fd(t_redirect *r)
+static int	here_document_to_fd(t_redirect *r)
 {
 	int		herepipe[2];
 	size_t	document_len;
@@ -58,8 +53,6 @@ int	here_document_to_fd(t_redirect *r)
 	}
 }
 
-// ファイルを作るのと、ファイルを読み取るのの失敗は別だね
-
 static int	do_redirection_internal(char *prog_name, t_redirect *redirect)
 {
 	t_redirect	*r;
@@ -72,19 +65,16 @@ static int	do_redirection_internal(char *prog_name, t_redirect *redirect)
 		if (r->instruction == e_input_direction)
 		{
 			fd = open(r->filename, O_RDONLY);
-			if (fd == -1)
-				return (internal_error(prog_name, r->filename,
-						strerror(errno)), EXECUTION_FAILURE);
 			to_fd = 0;
 		}
 		else
 		{
 			fd = open(r->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-			if (fd == -1)
-				return (internal_error(prog_name, r->filename,
-						strerror(errno)), EXECUTION_FAILURE);
 			to_fd = 1;
 		}
+		if (fd == -1)
+			return (internal_error(prog_name, r->filename, strerror(errno)),
+				EXECUTION_FAILURE);
 		if (dup2(fd, to_fd) < 0)
 			return (sys_error(r->filename), EXECUTION_FAILURE);
 		close(fd);
@@ -93,7 +83,7 @@ static int	do_redirection_internal(char *prog_name, t_redirect *redirect)
 	return (EXECUTION_SUCCESS);
 }
 
-int	do_redirectinos(char *prog_name, t_redirect *redirect)
+int	do_redirections(char *prog_name, t_redirect *redirect)
 {
 	int here_fd;
 

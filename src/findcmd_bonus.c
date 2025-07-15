@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 20:02:12 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/15 22:41:29 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static char	*find_user_command_in_path(char *arg, char **path_list,
 	return (full_path);
 }
 
-char	*search_for_command(char *prog_name, char *arg, char *envp[])
+char	*search_for_command(char *arg, char *envp[])
 {
 	char **path_list;
 	int i;
@@ -93,8 +93,8 @@ char	*search_for_command(char *prog_name, char *arg, char *envp[])
 
 	if (absolute_program(arg))
 		return (check_absolute_program(arg));
-	path = ft_split(get_path_line(envp), ':');
-	if (!path)
+	path_list = ft_split(get_path_line(envp), ':');
+	if (!path_list)
 	{
 		sys_error("cannot malloc");
 		exit(1);
@@ -102,7 +102,7 @@ char	*search_for_command(char *prog_name, char *arg, char *envp[])
 	i = 0;
 	file_to_lose_on = NULL;
 	full_path = find_user_command_in_path(arg, path_list, file_to_lose_on);
-	free_path(path);
+	free_path(path_list);
 	if (full_path)
 		return (full_path);
 	if (file_to_lose_on)

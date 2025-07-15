@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 19:46:11 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:21:45 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void set_here_doc(t_redirect *r, enum e_instruction inst, char *here_doc_
 	r->filename = NULL;
 	r->instruction = inst;
 	r->next = NULL;
-	r->document = make_here_document(r->here_doc_eof, c);
+	r->document = make_here_document(r, c);
 }
 
 void cmdlst_add_back(t_command *head, t_command *new)
@@ -50,7 +50,7 @@ t_command *set_redirect(t_command *c, enum e_instruction inst, char *filename_eo
 	if (inst == e_output_direction || inst == e_input_direction)
 		set_fileredirect(r, inst, filename_eof);
 	else if (inst == e_reading_until)
-		set_here_doc(r, inst, filename_eof, c)
+		set_here_doc(r, inst, filename_eof, c);
 	else
 		r = NULL;
 	c->redirect = r;

@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 19:55:32 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/15 23:57:00 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
 		do_piping(pipefd.pipe_in, pipefd.pipe_out);
 		if (builtin)
 		{
-			internal_error(cmd->prog_name,
-				"shell built-in command is not supported", cmd->cmdv[0]);
+			internal_error(cmd->prog_name, BUILTIN_STR, cmd->cmdv[0]);
 			exit(-1);
 		}
 		else
@@ -119,9 +118,9 @@ int	execute_pipeline(t_command *cmd, char *envp[])
 			pipefd.pipe_out = -1;
 		lastpid = execute_simple_command(pipefd, cur_cmd, envp);
 		close_pipe(&pipefd);
-		cur_cmd = cur_cmd->next;
-		if (cur_cmd->next)
+		if (cur_cmd->next) 
 			pipefd.pipe_in = fildes[0];
+		cur_cmd = cur_cmd->next;
 	}
 	return (wait_for(lastpid));
 }

@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:08:48 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/13 23:25:07 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:24:01 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 
 # include "ft_printf.h"
 # include "get_next_line.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <string.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-#include <errno.h>
-
 
 # ifndef HEREDOC_PIPESIZE
 #  ifdef PIPE_BUF
@@ -39,6 +38,7 @@
 # define EX_NOTFOUND 127
 
 # define NOTFOUND_STR "command not found"
+# define BUILTIN_STR "shell built-in command is not supported"
 
 # define MIN_ARG 5
 # define MIN_HEREDOC_ARG 6
@@ -77,31 +77,26 @@ typedef struct s_pipefd
 	int					pipe_out;
 }						t_pipefd;
 
-// typedef struct s_redirect {
-// 	char *word;
-// 	char *here_doc_eof;
-
-// } t_redirect;
-
 // ft_mkstemp.c
 int						ft_mkstemp(char *template);
 
 // parse_bonus.c
 t_command				*parse(int argc, char **argv);
+
+// parse_utils_bonus.c
 t_bool					args_check(int argc, char **argv);
 
 // utils_bonus.c
 t_bool					is_builtin(char *cmd);
 
 char					**make_command(char *arg);
-char					*search_for_command(char *prog_name, char *arg, char *envp[]);
+char					*search_for_command(char *arg, char *envp[]);
 
 // redir_bonus.c
 int						do_redirections(char *prog_name, t_redirect *redirect);
-int						here_document_to_fd(t_redirect *r);
 
 // make_cmd_bonus.c
-char					*make_here_document(char *here_doc_eof);
+char					*make_here_document(t_redirect *r, t_command *c);
 void					heredoc_expand(t_redirect *r, size_t *lenp);
 
 // cmdlst_bonus.c

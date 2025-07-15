@@ -6,14 +6,13 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 13:45:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 19:53:04 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:15:11 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // parse_utils_bonus.c
-t_bool				args_check(int argc, char **argv);
 t_bool				is_here_doc(char *cmd);
 
 static t_command	*first_command(char *prog_name, char **cmdv, char *cmd,
@@ -80,7 +79,10 @@ t_command	*parse(int argc, char **argv)
 		else
 			cmd = last_command(argv[0], argv[i], argv[i + 1]);
 		if (!cmd)
+		{
+			dispose_command(cmd_head);
 			return (NULL);
+		}
 		cmdlst_add_back(cmd_head, cmd);
 		i++;
 	}
