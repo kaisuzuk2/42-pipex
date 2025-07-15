@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_bonus.c                                      :+:      :+:    :+:   */
+/*   parse_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/12 14:12:44 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 19:55:52 by kaisuzuk         ###   ########.fr       */
+/*   Created: 2025/07/15 19:50:43 by kaisuzuk          #+#    #+#             */
+/*   Updated: 2025/07/15 19:52:42 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-
-// error for system call function
-void sys_error(char *err_txt)
+t_bool	is_here_doc(char *cmd)
 {
-	int e;
-
-	e = errno;
-	ft_dprintf(STDERR_FILENO, "%s", err_txt);
-	ft_dprintf(STDERR_FILENO, ": %s\n", strerror(e));
+	return (ft_strcmp(cmd, "here_doc") == 0);
 }
 
-// error for internal function
-void internal_error(char *prog_name, char *text, char *errno_text)
+t_bool	args_check(int argc, char **argv)
 {
-	ft_dprintf(STDERR_FILENO, "%s", prog_name);
-	ft_dprintf(STDERR_FILENO, ": %s", errno_text);
-	ft_dprintf(STDERR_FILENO, ": %s\n", text);
+	if (argc < MIN_ARG)
+		return (FALSE);
+	if (is_here_doc(argv[1]) && argc < MIN_HEREDOC_ARG)
+		return (FALSE);
+	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:12:02 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/06 14:44:24 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:56:17 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char **make_command(char *arg)
 	return (cmd);
 }
 
-// strcmp作ろうね
 t_bool is_builtin(char *cmd)
 {
 	if (!ft_strcmp(cmd, "cd"))

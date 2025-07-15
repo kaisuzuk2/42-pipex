@@ -6,11 +6,16 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/13 23:25:34 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:55:32 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+// execute_pipeline_utils_bonus.c
+void			do_piping(int pipe_in, int pipe_out);
+void			close_pipe(t_pipefd *pipefd);
+int				open_pipe(t_pipefd *pipefd, int *fildes);
 
 static pid_t	wait_for(pid_t lastpid)
 {
@@ -34,37 +39,21 @@ static pid_t	wait_for(pid_t lastpid)
 	return (last_status);
 }
 
-static void	do_piping(int pipe_in, int pipe_out)
+static int	shell_execve(char *prog_name, char *command, char **args,
+		char **envp)
 {
-	if (pipe_in != -1)
-	{
-		dup2(pipe_in, 0);
-		close(pipe_in);
-	}
-	if (pipe_out != -1)
-	{
-		dup2(pipe_out, 1);
-		close(pipe_out);
-	}
-}
+	int	i;
 
-static int shell_execve(char *prog_name, char *command, char **args, char **envp)
-{
-	int i;
-	
 	execve(command, args, envp);
 	i = errno;
 	internal_error(prog_name, command, strerror(i));
 	return (i);
 }
 
-// do external command
-// こっちでdo_redirectionnする
-// 実行権限エラーをどうするか
-static void 	execute_disk_command(t_command *cmd, char *envp[])
+static void	execute_disk_command(t_command *cmd, char *envp[])
 {
 	char	*cmd_path;
-	
+
 	if (cmd->redirect && do_redirections(cmd->prog_name, cmd->redirect) != 0)
 		exit(EXECUTION_FAILURE);
 	cmd_path = search_for_command(cmd->cmdv[0], envp);
@@ -77,7 +66,6 @@ static void 	execute_disk_command(t_command *cmd, char *envp[])
 }
 
 // biltin or user function or disk command check
-// pipe -> fork
 static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
 		char *envp[])
 {
@@ -96,35 +84,14 @@ static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
 		do_piping(pipefd.pipe_in, pipefd.pipe_out);
 		if (builtin)
 		{
-			// ビルトインだからerrorno使うのおかしいね
-			sys_error(cmd->cmdv[0]);
+			internal_error(cmd->prog_name,
+				"shell built-in command is not supported", cmd->cmdv[0]);
 			exit(-1);
 		}
 		else
 			execute_disk_command(cmd, envp);
 	}
 	return (pid);
-}
-
-// １つ目が成功していたとき、途中でエラーが起こったら実行した子プロセスをwaitするのか
-static int	open_pipe(t_pipefd *pipefd, int *fildes)
-{
-	if (pipe(fildes) < 0)
-	{
-		sys_error("pipe_error");
-		if (pipefd->pipe_in != -1)
-			close(pipefd->pipe_in);
-		return (EXECUTION_FAILURE);
-	}
-	return (EXECUTION_SUCCESS);
-}
-
-static void	close_pipe(t_pipefd *pipefd)
-{
-	if (pipefd->pipe_in != -1)
-		close(pipefd->pipe_in);
-	if (pipefd->pipe_out != -1)
-		close(pipefd->pipe_out);
 }
 
 int	execute_pipeline(t_command *cmd, char *envp[])
@@ -141,7 +108,11 @@ int	execute_pipeline(t_command *cmd, char *envp[])
 		if (cur_cmd->next)
 		{
 			if (open_pipe(&pipefd, fildes))
+			{
+				if (pipefd.pipe_in != -1)
+					close(pipefd.pipe_in);
 				return (wait_for(-1), EXECUTION_FAILURE);
+			}
 			pipefd.pipe_out = fildes[1];
 		}
 		else

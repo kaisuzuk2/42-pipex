@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 17:17:38 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/12 14:12:25 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:42:17 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int ft_mkstemp(char *template)
 		{
 			template = filename;
 			return (open(filename, O_RDWR|O_CREAT|O_EXCL, 0600));
-		} // なんでrdwrなんかよくわからん　書き込みだけでよくね？
+		} 
 		free(addnum);
 		free(filename);
 		i++;			
