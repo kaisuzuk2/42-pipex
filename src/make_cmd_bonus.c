@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:05:23 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/16 00:33:05 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:47:29 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static char	*documentcat(char *document, char *buf)
 	return (document);
 }
 
+
+// control + dのときの処理が必要だね
 char	*make_here_document(t_redirect *r, t_command *c)
 {
 	char *buf;

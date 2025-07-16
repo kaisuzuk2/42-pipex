@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 23:00:16 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:51:41 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static int	here_document_to_fd(t_redirect *r)
 	}
 }
 
+// それぞれのファイルで権限がなかったときの処理を考えよう
+// 出力リダイレクト先が元から用意されていた場合のケースはどうかね
 static int	do_redirection_internal(char *prog_name, t_redirect *redirect)
 {
 	t_redirect	*r;

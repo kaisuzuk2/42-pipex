@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 23:57:00 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/16 23:41:39 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static pid_t	wait_for(pid_t lastpid)
 	pid_t	wpid;
 
 	i = 0;
+	last_status = EXECUTION_FAILURE;
 	while (1)
 	{
 		wpid = waitpid(-1, &status, 0);
@@ -36,7 +37,10 @@ static pid_t	wait_for(pid_t lastpid)
 	}
 	if (lastpid < 0)
 		return (EXECUTION_FAILURE);
-	return (last_status);
+	if (WIFEXITED(last_status))		
+		return (WEXITSTATUS(last_status));
+	else
+		return (EXECUTION_FAILURE);
 }
 
 static int	shell_execve(char *prog_name, char *command, char **args,
@@ -85,7 +89,7 @@ static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
 		if (builtin)
 		{
 			internal_error(cmd->prog_name, BUILTIN_STR, cmd->cmdv[0]);
-			exit(-1);
+			exit(EXECUTION_FAILURE);
 		}
 		else
 			execute_disk_command(cmd, envp);

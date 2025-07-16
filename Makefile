@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/15 23:39:25 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/16 14:50:47 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,9 @@ FT_NAME	=	libftprintf
 FT_URL	=	https://github.com/kaisuzuk2/ft_dprintf.git
 INC		+=	-I$(FT_NAME)/includes
 INC		+= 	-I$(FT_NAME)/libft
-# INC		+=	-L$(FT_NAME)
-# INC		+=	-lftprintf
 
 GNL_NAME	=	libgnl
 GNL_URL		=	https://github.com/kaisuzuk2/42-get_next_line.git
-# INC		+=	-I$(GNL_NAME)
-# INC		+=	-lgnl
 INC		+=	-I$(GNL_NAME)
 
 MAKE	=	make -C
