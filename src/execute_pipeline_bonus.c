@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/16 23:41:39 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/17 20:38:44 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,22 @@ static int	shell_execve(char *prog_name, char *command, char **args,
 	return (i);
 }
 
+// search_for_commandはnullを返すからね
 static void	execute_disk_command(t_command *cmd, char *envp[])
 {
 	char	*cmd_path;
 
 	if (cmd->redirect && do_redirections(cmd->prog_name, cmd->redirect) != 0)
 		exit(EXECUTION_FAILURE);
+	if (cmd->cmdv[0] == NULL)
+	{
+		internal_error(cmd->prog_name, "", NOTFOUND_STR);
+		exit(EX_NOTFOUND);
+	}
 	cmd_path = search_for_command(cmd->cmdv[0], envp);
 	if (!cmd_path)
 	{
-		internal_error(cmd->prog_name, cmd_path, NOTFOUND_STR);
+		internal_error(cmd->prog_name, cmd->cmdv[0], NOTFOUND_STR);
 		exit(EX_NOTFOUND);
 	}
 	exit(shell_execve(cmd->prog_name, cmd_path, &cmd->cmdv[0], envp));
