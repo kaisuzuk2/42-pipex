@@ -6,11 +6,14 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/19 16:06:39 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:59:27 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+// ft_quate_split_bonus.c
+char		**ft_quate_split(char const *s, char c);
 
 static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
 		char *filename)
@@ -69,7 +72,7 @@ t_command	*cmdnew(char *prog_name, char *cmds)
 	if (!c)
 		return (NULL);
 	c->prog_name = prog_name;
-	cmdv = ft_split(cmds, ' ');
+	cmdv = ft_quate_split(cmds, ' ');
 	if (!cmdv)
 		return (NULL);
 	c->cmdv = cmdv;

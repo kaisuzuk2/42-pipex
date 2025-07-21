@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quate_split.c                                      :+:      :+:    :+:   */
+/*   ft_quate_split_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 23:11:39 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/19 16:14:53 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:58:29 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
 static size_t	ft_word_count(char const *s, char c)
 {
 	size_t	res;
 	int		flg;
+	int		quate_flg;
 
 	res = 0;
 	flg = 1;
+	quate_flg = 0;
 	while (*s)
 	{
-		if (*s == c)
+		if (*s == '"')
+			quate_flg = !quate_flg;
+		else if (*s == c && !quate_flg)
 			flg = 1;
 		else if (flg)
 		{
@@ -33,24 +37,41 @@ static size_t	ft_word_count(char const *s, char c)
 	return (res);
 }
 
+static char	*ft_extract_word(const char *p, int len)
+{
+	char	*tmp;
+	char	*res;
+
+	tmp = (char *)malloc(sizeof(char) * (len + 1));
+	if (tmp == NULL)
+		return (NULL);
+	ft_strlcpy(tmp, p, len + 1);
+	res = ft_strtrim(tmp, "\"");
+	free(tmp);
+	if (!res)
+		return (NULL);
+	return (res);
+}
+
 static char	*ft_fill_word(char const **p, char c)
 {
-	char	*res;
 	size_t	str_len;
+	int		quate_flg;
+	char	*res;
 
 	str_len = 0;
+	quate_flg = 0;
 	while (**p == c)
 		(*p)++;
 	while ((*p)[str_len])
 	{
-		if ((*p)[str_len] == c)
+		if ((*p)[str_len] == '"')
+			quate_flg = !quate_flg;
+		if ((*p)[str_len] == c && !quate_flg)
 			break ;
 		str_len++;
 	}
-	res = (char *)malloc(sizeof(char) * (str_len + 1));
-	if (res == NULL)
-		return (NULL);
-	ft_strlcpy(res, *p, str_len + 1);
+	res = ft_extract_word(*p, str_len);
 	*p = *p + str_len;
 	return (res);
 }
@@ -62,7 +83,7 @@ static void	ft_free(char **current, char **head)
 	free(current);
 }
 
-char	**quate_split(char const *s, char c)
+char	**ft_quate_split(char const *s, char c)
 {
 	char	**head;
 	char	**tmp;
@@ -76,29 +97,13 @@ char	**quate_split(char const *s, char c)
 	while (tmp < &head[head_size])
 	{
 		*tmp = ft_fill_word(&s, c);
-		if (*tmp++ == NULL)
+		if (*tmp == NULL)
 		{
-			while (--tmp > head)
-				free(tmp);
-			free(head);
+			ft_free(++tmp, head);
 			return (NULL);
 		}
+		tmp++;
 	}
 	*tmp = NULL;
 	return (head);
 }
-
-// #include <stdio.h>
-// int main(void)
-// {
-// 	char str[] = "hello world this is a pen";
-// 	char c = ' ';
-// 	char **res = ft_split(str, c);
-// 	if (res == NULL)
-// 		return (0);
-// 	for (int i = 0; res[i]; i++)
-// 		printf("%s\n", res[i]);
-// 	for (int i = 0; res[i]; i++)
-// 		free(res[i]);
-// 	free(res);
-// }

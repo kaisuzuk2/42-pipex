@@ -18,6 +18,7 @@ compare_output(){
 }
 
 # command test
+echo "<<<<<<<<<<<<<<< command test >>>>>>>>>>>>>>>"
 ## 0
 echo "hello world" > infile
 $PIPEX infile "ls -l" "wc -l" $OUT
@@ -93,32 +94,41 @@ cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat  > expected
 compare_output "$OUT" expected "Test8: 100 commands {cat | cat ... | cat}: "
 
+## 9 
+echo "hello world\nhello c\nhello 42\nhello tokyo\n" > infile
+$PIPEX infile "cat" "grep \"hello world\"" $OUT
+< infile cat | grep "hello world" > expected
+compare_output "$OUT" expected "Test9: space split{cat | grep \"hello world\"}: "
 
 # file test
-## 9
+echo "<<<<<<<<<<<<<<< file test >>>>>>>>>>>>>>>"
+## 0
 echo "hello world" > infile
 $PIPEX infile "cat" "cat" $OUT
 < infile cat | cat > expected
-compare_output "$OUT" expected "Test9: redirect normal test {cat | cat}: "
+compare_output "$OUT" expected "Test0: redirect normal test {cat | cat}: "
 
-## 10
+## 1
 yes "0123456789" | tr -d '\n' | head -c 6000 > infile
 $PIPEX infile "cat" "cat" $OUT
 < infile cat | cat > expected
-compare_output "$OUT" expected "Test10: redirect biginput test { cat | cat }: "
+compare_output "$OUT" expected "Test1: redirect biginput test { cat | cat }: "
 
-##  11
+##  2
 echo "hello world" > infile
 chmod -r infile
 $PIPEX infile "cat" "cat" $OUT 2> err.txt
-grep -q "Permission denied" err.txt && echo "✅ Test11: input file permission denied: PASS" || echo "❌ Test11: input file permission denied: FAIL"
+grep -q "Permission denied" err.txt && echo "✅ Test2: input file permission denied: PASS" || echo "❌ Test2: input file permission denied: FAIL"
 rm -f err.txt infile $OUT
 
-## 12
+## 3
 echo "hello world" > infile
 touch $OUT
 chmod 000 $OUT
 $PIPEX infile "cat" "cat" $OUT 2>err.txt
-grep -q "Permission denied" err.txt && echo "✅ Test12: output file permission denied: PASS" || echo "❌ Test12: output file  permission denied: FAIL"
+grep -q "Permission denied" err.txt && echo "✅ Test3: output file permission denied: PASS" || echo "❌ Test3: output file  permission denied: FAIL"
 rm -f err.txt infile $OUT
 
+$PIPEX noexistfile "cat" "cat" $OUT 2>err.txt
+grep -q "No such file or directory" err.txt && echo "✅ Test4: non exist file: PASS" || echo "❌ Test4: non exist file: PASS"
+rm -f err.txt

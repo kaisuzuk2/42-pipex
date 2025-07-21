@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/19 18:48:26 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/21 17:54:02 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ DEBUG	=	-g -fsanitize=address
 _SRCS	=	execute_pipeline_bonus.c\
 			execute_pipeline_utils_bonus.c\
 			ft_mkstemp_bonus.c \
+			ft_quate_split_bonus.c \
 			parse_bonus.c\
 			parse_utils_bonus.c\
 			redir_bonus.c\
@@ -29,7 +30,7 @@ _SRCS	=	execute_pipeline_bonus.c\
 			cmdlst_bonus.c \
 			make_cmd_bonus.c \
 			dispose_cmd_bonus.c \
-			error_bonus.c
+			error_bonus.c 
 			
 SRCS	=	$(addprefix src/, $(_SRCS))
 OBJS	=	$(SRCS:.c=.o)
