@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 13:45:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/16 00:15:11 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/20 15:58:10 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static t_command	*last_command(char *prog_name, char *cmd, char *filename)
 
 t_command	*parse(int argc, char **argv)
 {
-	const int	end = argc - 1;
+	const int	end = argc - 2;
 	int			i;
 	t_command	*cmd_head;
 	t_command	*cmd;
@@ -72,17 +72,14 @@ t_command	*parse(int argc, char **argv)
 	if (!cmd_head)
 		return (NULL);
 	i++;
-	while (i < end)
+	while (i <= end)
 	{
-		if (i != (end - 1))
+		if (i != end)
 			cmd = middle_command(argv[0], argv[i]);
 		else
 			cmd = last_command(argv[0], argv[i], argv[i + 1]);
 		if (!cmd)
-		{
-			dispose_command(cmd_head);
-			return (NULL);
-		}
+			return (dispose_command(cmd_head), NULL);
 		cmdlst_add_back(cmd_head, cmd);
 		i++;
 	}

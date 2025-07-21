@@ -6,17 +6,17 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/15 22:41:29 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:52:41 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // findcmd_utils_bonus.c
-int			absolute_program(char *arg);
-void		free_path(char **path);
-char		*get_path_line(char *envp[]);
-char		*savestring(char *str);
+int				absolute_program(char *arg);
+void			free_path(char **path);
+char			*find_variable_tempenv(char *envp[], char *name);
+char			*savestring(char *str);
 
 static char	*check_absolute_program(char *arg)
 {
@@ -40,7 +40,7 @@ static char	*join_path_element(char *dir, char *arg)
 	return (full_path);
 }
 
-static int	file_status(char *full_path, char *file_to_lose_on)
+static t_bool	file_status(char *full_path, char *file_to_lose_on)
 {
 	if (!access(full_path, F_OK))
 	{
@@ -68,7 +68,7 @@ static char	*find_user_command_in_path(char *arg, char **path_list,
 		full_path = join_path_element(path_list[i], arg);
 		if (!full_path)
 		{
-			sys_error("cannnot malloc");
+			sys_error(MALLOC_STR);
 			free(path_list);
 			exit(EXECUTION_FAILURE);
 		}
@@ -86,20 +86,22 @@ static char	*find_user_command_in_path(char *arg, char **path_list,
 
 char	*search_for_command(char *arg, char *envp[])
 {
-	char **path_list;
-	int i;
-	char *full_path;
-	char *file_to_lose_on;
+	char	**path_list;
+	char	*path;
+	char	*full_path;
+	char	*file_to_lose_on;
 
 	if (absolute_program(arg))
 		return (check_absolute_program(arg));
-	path_list = ft_split(get_path_line(envp), ':');
+	path = find_variable_tempenv(envp, "PATH");
+	if (!path)
+		return (arg);
+	path_list = ft_split(path, ':');
 	if (!path_list)
 	{
-		sys_error("cannot malloc");
-		exit(1);
+		sys_error(MALLOC_STR);
+		exit(EXECUTION_FAILURE);
 	}
-	i = 0;
 	file_to_lose_on = NULL;
 	full_path = find_user_command_in_path(arg, path_list, file_to_lose_on);
 	free_path(path_list);

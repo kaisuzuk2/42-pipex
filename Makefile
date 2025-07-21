@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/16 14:50:47 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/19 18:48:26 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,11 +52,11 @@ all: $(NAME)
 $(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
 	$(MAKE) $(FT_NAME)
 	$(MAKE) $(GNL_NAME)
-	$(CC) -o $(NAME) $(DEBUG) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 	
 
 %.o: %.c
-	$(CC) -c $(DEBUG) $(FLAG) $(INC) $< -o $@
+	$(CC) -c $(FLAG) $(INC) $< -o $@
 
 clean: 
 	$(RM) $(FT_NAME)

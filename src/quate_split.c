@@ -6,10 +6,11 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 23:11:39 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/02 23:21:42 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:14:53 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "pipex.h"
 
 static size_t	ft_word_count(char const *s, char c)
 {
@@ -82,12 +83,10 @@ char	**quate_split(char const *s, char c)
 			free(head);
 			return (NULL);
 		}
-		// tmp++;
 	}
 	*tmp = NULL;
 	return (head);
 }
-
 
 // #include <stdio.h>
 // int main(void)

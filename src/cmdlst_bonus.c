@@ -6,22 +6,24 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/16 00:21:45 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:06:39 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void set_fileredirect(t_redirect *r, enum e_instruction inst, char *filename)
+static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
+		char *filename)
 {
 	r->document = NULL;
 	r->here_doc_eof = NULL;
 	r->filename = filename;
 	r->instruction = inst;
-	r->next = NULL;	
+	r->next = NULL;
 }
 
-static void set_here_doc(t_redirect *r, enum e_instruction inst, char *here_doc_eof, t_command *c)
+static void	set_here_doc(t_redirect *r, enum e_instruction inst,
+		char *here_doc_eof, t_command *c)
 {
 	r->here_doc_eof = here_doc_eof;
 	r->filename = NULL;
@@ -30,9 +32,9 @@ static void set_here_doc(t_redirect *r, enum e_instruction inst, char *here_doc_
 	r->document = make_here_document(r, c);
 }
 
-void cmdlst_add_back(t_command *head, t_command *new)
+void	cmdlst_add_back(t_command *head, t_command *new)
 {
-	t_command *tmp;
+	t_command	*tmp;
 
 	tmp = head;
 	while (tmp->next)
@@ -40,9 +42,10 @@ void cmdlst_add_back(t_command *head, t_command *new)
 	tmp->next = new;
 }
 
-t_command *set_redirect(t_command *c, enum e_instruction inst, char *filename_eof)
+t_command	*set_redirect(t_command *c, enum e_instruction inst,
+		char *filename_eof)
 {
-	t_redirect *r;
+	t_redirect	*r;
 
 	r = (t_redirect *)malloc(sizeof(t_redirect));
 	if (!r)
@@ -57,10 +60,10 @@ t_command *set_redirect(t_command *c, enum e_instruction inst, char *filename_eo
 	return (c);
 }
 
-t_command *cmdnew(char *prog_name, char *cmds)
+t_command	*cmdnew(char *prog_name, char *cmds)
 {
-	t_command *c;
-	char **cmdv;
+	t_command	*c;
+	char		**cmdv;
 
 	c = (t_command *)malloc(sizeof(t_command));
 	if (!c)
