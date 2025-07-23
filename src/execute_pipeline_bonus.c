@@ -6,34 +6,32 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/20 18:55:47 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 22:54:39 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // execute_pipeline_utils_bonus.c
-void			do_piping(int pipe_in, int pipe_out);
+t_bool			do_piping(int pipe_in, int pipe_out);
 void			close_pipe(t_pipefd *pipefd);
 int				open_pipe(t_pipefd *pipefd, int *fildes);
 int				execute_pipe_internal(t_pipefd *pipefd, int *fildes);
 
 pid_t	wait_for(pid_t lastpid)
 {
-	int		i;
 	int		status;
 	int		last_status;
 	pid_t	wpid;
 
-	i = 0;
+	last_status = -1;
 	while (1)
 	{
 		wpid = waitpid(-1, &status, 0);
-		if (wpid == -1)
+		if (wpid < 0)
 			break ;
 		if (wpid == lastpid)
 			last_status = status;
-		i++;
 	}
 	if (lastpid < 0)
 		return (EXECUTION_FAILURE);
@@ -43,14 +41,16 @@ pid_t	wait_for(pid_t lastpid)
 		return (EXECUTION_FAILURE);
 }
 
-static int	shell_execve(char *prog_name, char *command, char **args,
+static int	shell_execve(t_command *cmd, char *command, char **args,
 		char **envp)
 {
 	int	i;
 
 	execve(command, args, envp);
 	i = errno;
-	internal_error(prog_name, command, strerror(i));
+	internal_error(cmd->prog_name, command, strerror(i));
+	dispose_command(cmd->head);
+	free(command);
 	return (i);
 }
 
@@ -58,42 +58,51 @@ static void	execute_disk_command(t_command *cmd, char *envp[])
 {
 	char	*cmd_path;
 
-	if (cmd->redirect && do_redirections(cmd->prog_name, cmd->redirect) != 0)
+	if (cmd->redirect && do_redirections(cmd->prog_name, cmd->redirect,
+			envp) != 0)
+	{
+		dispose_command(cmd->head);
 		exit(EXECUTION_FAILURE);
+	}
 	if (cmd->cmdv[0] == NULL)
 	{
 		internal_error(cmd->prog_name, "", NOTFOUND_STR);
+		dispose_command(cmd->head);
 		exit(EX_NOTFOUND);
 	}
-	cmd_path = search_for_command(cmd->cmdv[0], envp);
+	cmd_path = search_for_command(cmd, envp);
 	if (!cmd_path)
 	{
 		internal_error(cmd->prog_name, cmd->cmdv[0], NOTFOUND_STR);
+		dispose_command(cmd->head);
 		exit(EX_NOTFOUND);
 	}
-	exit(shell_execve(cmd->prog_name, cmd_path, &cmd->cmdv[0], envp));
+	exit(shell_execve(cmd, cmd_path, &cmd->cmdv[0], envp));
 }
 
 // biltin or user function or disk command check
 static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
-		char *envp[])
+		char *envp[], int close_fd)
 {
-	t_bool	builtin;
-	pid_t	pid;
+	const t_bool	builtin = is_builtin(cmd->cmdv[0]);
+	const pid_t		pid = fork();
 
-	builtin = is_builtin(cmd->cmdv[0]);
-	pid = fork();
 	if (pid < 0)
-	{
-		sys_error("fork error");
-		return (-1);
-	}
+		return (dispose_command(cmd->head), sys_error("fork error"), -1);
 	if (pid == 0)
 	{
-		do_piping(pipefd.pipe_in, pipefd.pipe_out);
+		if (pipefd.pipe_in == -1)
+			close(close_fd);
+		if (!do_piping(pipefd.pipe_in, pipefd.pipe_out))
+		{
+			dispose_command(cmd->head);
+			sys_error("dup error");
+			exit(EXECUTION_FAILURE);
+		}
 		if (builtin)
 		{
 			internal_error(cmd->prog_name, BUILTIN_STR, cmd->cmdv[0]);
+			dispose_command(cmd->head);
 			exit(EXECUTION_FAILURE);
 		}
 		else
@@ -116,11 +125,12 @@ int	execute_pipeline(t_command *cmd, char *envp[])
 		if (cur_cmd->next)
 		{
 			if (!execute_pipe_internal(&pipefd, fildes))
-				return (EXECUTION_FAILURE);
+				return (dispose_command(cmd->head), sys_error("pipe error"),
+					EXECUTION_FAILURE);
 		}
 		else
 			pipefd.pipe_out = -1;
-		lastpid = execute_simple_command(pipefd, cur_cmd, envp);
+		lastpid = execute_simple_command(pipefd, cur_cmd, envp, fildes[0]);
 		close_pipe(&pipefd);
 		if (cur_cmd->next)
 			pipefd.pipe_in = fildes[0];

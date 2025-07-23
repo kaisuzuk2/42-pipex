@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/20 18:38:07 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:24:43 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,15 @@ static int	here_document_to_file(char *prog_name, t_redirect *r)
 	return (free(filename), fd2);
 }
 
-static int	here_document_to_fd(char *prog_name, t_redirect *r)
+static int	here_document_to_fd(char *prog_name, t_redirect *r, char **envp)
 {
 	int		herepipe[2];
 	size_t	document_len;
 	int		fd;
 
-	heredoc_expand(r, &document_len);
+	document_len = 0;
+	if (r->document && !heredoc_expand(r, &document_len, envp))
+		return (sys_error(MALLOC_STR), EXECUTION_FAILURE);
 	if (document_len == 0)
 	{
 		fd = open("/dev/null", O_RDONLY);
@@ -97,14 +99,15 @@ static int	do_redirection_internal(char *prog_name, t_redirect *r)
 			return (internal_error(prog_name, r->filename, strerror(errno)),
 				EXECUTION_FAILURE);
 		if (dup2(fd, to_fd) < 0)
-			return (sys_error("cannot duplicate fd"), EXECUTION_FAILURE);
+			return (sys_error("cannot duplicate fd"), close(fd),
+				EXECUTION_FAILURE);
 		close(fd);
 		r = r->next;
 	}
 	return (EXECUTION_SUCCESS);
 }
 
-int	do_redirections(char *prog_name, t_redirect *redirect)
+int	do_redirections(char *prog_name, t_redirect *redirect, char **envp)
 {
 	int	here_fd;
 
@@ -114,7 +117,7 @@ int	do_redirections(char *prog_name, t_redirect *redirect)
 			return (EXECUTION_FAILURE);
 	if (redirect->instruction == e_reading_until)
 	{
-		here_fd = here_document_to_fd(prog_name, redirect);
+		here_fd = here_document_to_fd(prog_name, redirect, envp);
 		if (here_fd == EXECUTION_FAILURE)
 			return (EXECUTION_FAILURE);
 		if (dup2(here_fd, 0) < 0)

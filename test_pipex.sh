@@ -100,6 +100,16 @@ $PIPEX infile "cat" "grep \"hello world\"" $OUT
 < infile cat | grep "hello world" > expected
 compare_output "$OUT" expected "Test9: space split{cat | grep \"hello world\"}: "
 
+## 10
+echo "hello world" > infile
+$PIPEX infile "/bin/ls -l" "/bin/wc -l" $OUT
+if diff "$OUT" <(< infile /bin/ls -l | /bin/wc -l); then
+	echo "✅ Test10: absolute path {/bin/ls -l | /bin/wc -l}: PASS"
+else
+	echo "❌ Test10: absolute path {/bin/ls -l | /bin/wc -l}: FAIL"
+fi
+rm -f infile $OUT
+
 # file test
 echo "<<<<<<<<<<<<<<< file test >>>>>>>>>>>>>>>"
 ## 0
@@ -109,10 +119,18 @@ $PIPEX infile "cat" "cat" $OUT
 compare_output "$OUT" expected "Test0: redirect normal test {cat | cat}: "
 
 ## 1
-yes "0123456789" | tr -d '\n' | head -c 6000 > infile
+yes "0123456789" | tr -d '\n' | head -c 100000 > infile
 $PIPEX infile "cat" "cat" $OUT
 < infile cat | cat > expected
 compare_output "$OUT" expected "Test1: redirect biginput test { cat | cat }: "
+
+## 2
+yes "0123456789" | head -c 100000 > infile
+yes "abcdefghij" | head -c 100000 >> infile 
+$PIPEX infile "cat -e" "head -2" $OUT
+< infile cat | cat > expected
+compare_output "$OUT" expected "Test1: redirect biginput2 test { cat -e | head -2 }: "
+rm -f infile	
 
 ##  2
 echo "hello world" > infile
@@ -129,6 +147,7 @@ $PIPEX infile "cat" "cat" $OUT 2>err.txt
 grep -q "Permission denied" err.txt && echo "✅ Test3: output file permission denied: PASS" || echo "❌ Test3: output file  permission denied: FAIL"
 rm -f err.txt infile $OUT
 
+## 4
 $PIPEX noexistfile "cat" "cat" $OUT 2>err.txt
 grep -q "No such file or directory" err.txt && echo "✅ Test4: non exist file: PASS" || echo "❌ Test4: non exist file: PASS"
 rm -f err.txt

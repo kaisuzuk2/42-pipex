@@ -6,14 +6,14 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/21 17:59:27 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 22:55:14 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // ft_quate_split_bonus.c
-char		**ft_quate_split(char const *s, char c);
+char		**command_split(char const *s, char c);
 
 static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
 		char *filename)
@@ -28,10 +28,25 @@ static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
 static void	set_here_doc(t_redirect *r, enum e_instruction inst,
 		char *here_doc_eof, t_command *c)
 {
-	r->here_doc_eof = here_doc_eof;
+	r->quate_flg = (ft_strchr(here_doc_eof, '\'') || ft_strchr(here_doc_eof,
+				'\"'));
 	r->filename = NULL;
 	r->instruction = inst;
 	r->next = NULL;
+	if (ft_strchr(here_doc_eof, '\\'))
+		r->here_doc_eof = ft_strdup(here_doc_eof);
+	else if (ft_strchr(here_doc_eof, '\''))
+		r->here_doc_eof = ft_strtrim(here_doc_eof, "\'");
+	else if (ft_strchr(here_doc_eof, '\"'))
+		r->here_doc_eof = ft_strtrim(here_doc_eof, "\"");
+	else
+		r->here_doc_eof = ft_strdup(here_doc_eof);
+	if (!r->here_doc_eof)
+	{
+		dispose_command(c);
+		sys_error(MALLOC_STR);
+		exit(EXECUTION_FAILURE);
+	}
 	r->document = make_here_document(r, c);
 }
 
@@ -63,7 +78,7 @@ t_command	*set_redirect(t_command *c, enum e_instruction inst,
 	return (c);
 }
 
-t_command	*cmdnew(char *prog_name, char *cmds)
+t_command	*cmdnew(char *prog_name, char *cmds, t_command *cmd_head)
 {
 	t_command	*c;
 	char		**cmdv;
@@ -72,11 +87,12 @@ t_command	*cmdnew(char *prog_name, char *cmds)
 	if (!c)
 		return (NULL);
 	c->prog_name = prog_name;
-	cmdv = ft_quate_split(cmds, ' ');
+	cmdv = command_split(cmds, ' ');
 	if (!cmdv)
 		return (NULL);
 	c->cmdv = cmdv;
 	c->redirect = NULL;
 	c->next = NULL;
+	c->head = cmd_head;
 	return (c);
 }

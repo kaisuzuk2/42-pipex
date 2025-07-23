@@ -6,18 +6,16 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 19:58:15 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/21 13:45:36 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:24:11 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int absolute_program(char *arg)
+int	absolute_program(char *arg)
 {
 	return (ft_strchr(arg, '/') != NULL);
 }
-
-// t_bool is_envp_set_path(char )
 
 void	free_path(char **path)
 {
@@ -52,9 +50,6 @@ char	*savestring(char *str)
 
 	res = ft_strdup(str);
 	if (!res)
-	{
-		sys_error(MALLOC_STR);
-		exit(EXECUTION_FAILURE);
-	}
+		return (NULL);
 	return (res);
 }

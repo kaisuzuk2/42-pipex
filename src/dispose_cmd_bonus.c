@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:50:59 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/19 16:07:04 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:30:17 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	dispose_redirect(t_redirect *redirect)
 		tmp = cur->next;
 		if (cur->document)
 			free(cur->document);
+		if (cur->here_doc_eof)
+			free(cur->here_doc_eof);
 		free(cur);
 		cur = tmp;
 	}

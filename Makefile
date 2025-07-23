@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/21 17:54:02 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/23 23:13:12 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,13 @@ CC		=	cc
 FLAG	=	-Wall -Werror -Wextra
 INC		=	-Iincludes
 
-DEBUG	=	-g -fsanitize=address
+DEBUG_SANITIZE	=	-g -fsanitize=address
 	
 _SRCS	=	execute_pipeline_bonus.c\
 			execute_pipeline_utils_bonus.c\
 			ft_mkstemp_bonus.c \
-			ft_quate_split_bonus.c \
+			command_split_bonus.c \
+			command_split_utils_bonus.c \
 			parse_bonus.c\
 			parse_utils_bonus.c\
 			redir_bonus.c\
@@ -29,6 +30,7 @@ _SRCS	=	execute_pipeline_bonus.c\
 			cmdutils_bonus.c \
 			cmdlst_bonus.c \
 			make_cmd_bonus.c \
+			make_cmd_utils_bonus.c \
 			dispose_cmd_bonus.c \
 			error_bonus.c 
 			
@@ -48,16 +50,18 @@ INC		+=	-I$(GNL_NAME)
 MAKE	=	make -C
 RM		=	rm -rf
 
-all: $(NAME)
+all: bonus
+
+bonus: $(NAME)
 
 $(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
 	$(MAKE) $(FT_NAME)
 	$(MAKE) $(GNL_NAME)
-	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	$(CC) -o $(NAME) $(FLAG) -g $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 	
 
 %.o: %.c
-	$(CC) -c $(FLAG) $(INC) $< -o $@
+	$(CC) -c $(FLAG) -g $(INC) $< -o $@
 
 clean: 
 	$(RM) $(FT_NAME)
@@ -75,6 +79,6 @@ $(FT_NAME):
 $(GNL_NAME):
 	git clone $(GNL_URL) $(GNL_NAME)
 
-.PHONY: clean fclean re
+.PHONY: clean fclean re bonus
 
 

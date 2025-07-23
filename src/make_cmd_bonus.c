@@ -6,16 +6,22 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:05:23 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/20 16:48:46 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:24:38 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+// make_cmd_utils_bonus.c
+char			*expand_string_to_string(char *document, char **envp);
 
-void	heredoc_expand(t_redirect *r, size_t *lenp)
+char	*heredoc_expand(t_redirect *r, size_t *lenp, char **envp)
 {
-	*lenp = ft_strlen(r->document);
+	if (!r->quate_flg && ft_strchr(r->document, '$'))
+		r->document = expand_string_to_string(r->document, envp);
+	if (!r->document)
+		*lenp = ft_strlen(r->document);
+	return (r->document);
 }
 
 static char	*documentcat(char *document, char *buf)
@@ -52,8 +58,8 @@ static t_bool	is_heredoc_eof(char *here_doc_eof, char *buf)
 
 char	*make_here_document(t_redirect *r, t_command *c)
 {
-	char		*buf;
-	char		*document;
+	char	*buf;
+	char	*document;
 
 	document = NULL;
 	while (1)
@@ -68,8 +74,7 @@ char	*make_here_document(t_redirect *r, t_command *c)
 		free(buf);
 		if (!document)
 		{
-			free(c);
-			free(r);
+			dispose_command(c);
 			sys_error(MALLOC_STR);
 			exit(EXECUTION_FAILURE);
 		}

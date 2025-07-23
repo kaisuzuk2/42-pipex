@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:08:48 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/20 20:12:03 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 19:26:05 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,13 @@ typedef struct s_redirect
 	enum e_instruction	instruction;
 	char				*filename;
 	char				*here_doc_eof;
+	int					quate_flg;
 	char				*document;
 }						t_redirect;
 
 typedef struct s_command
 {
+	struct s_command	*head;
 	struct s_command	*next;
 	char				*prog_name;
 	char				**cmdv;
@@ -86,22 +88,26 @@ t_command				*parse(int argc, char **argv);
 t_bool					args_check(int argc, char **argv);
 // utils_bonus.c
 t_bool					is_builtin(char *cmd);
-char					**make_command(char *arg);
-char					*search_for_command(char *arg, char *envp[]);
+char					*search_for_command(t_command *cmd, char *envp[]);
 // redir_bonus.c
-int						do_redirections(char *prog_name, t_redirect *redirect);
+int						do_redirections(char *prog_name, t_redirect *redirect,
+							char **envp);
 // make_cmd_bonus.c
 char					*make_here_document(t_redirect *r, t_command *c);
-void					heredoc_expand(t_redirect *r, size_t *lenp);
+char					*heredoc_expand(t_redirect *r, size_t *lenp,
+							char **envp);
 // cmdlst_bonus.c
-t_command				*cmdnew(char *prog_name, char *cmds);
+t_command				*cmdnew(char *prog_name, char *cmds,
+							t_command *cmd_head);
 t_command				*set_redirect(t_command *c, enum e_instruction inst,
 							char *filename_eof);
 void					cmdlst_add_back(t_command *head, t_command *new);
+// findcmd_utils_bonus.c
+char					*find_variable_tempenv(char *envp[], char *name);
 // execute_pipeline_bonus.c
 int						execute_pipeline(t_command *cmd, char *envp[]);
 // execute_pipeline_utils_bonus.c
-pid_t			wait_for(pid_t lastpid);
+pid_t					wait_for(pid_t lastpid);
 // dispose_cmd_bonus.c
 void					dispose_command(t_command *command);
 // error_bonus.c

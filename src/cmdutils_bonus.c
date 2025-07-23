@@ -6,20 +6,11 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:12:02 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/19 17:33:35 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:21:02 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-//環境変数とクォートで囲まれた文字列のケース
-char	**make_command(char *arg)
-{
-	char	**cmd;
-
-	cmd = ft_split(arg, ' ');
-	return (cmd);
-}
 
 t_bool	is_builtin(char *cmd)
 {
@@ -32,6 +23,8 @@ t_bool	is_builtin(char *cmd)
 	else if (!ft_strcmp(cmd, "unset"))
 		return (TRUE);
 	else if (!ft_strcmp(cmd, "exit"))
+		return (TRUE);
+	else if (!ft_strcmp(cmd, "."))
 		return (TRUE);
 	return (FALSE);
 }

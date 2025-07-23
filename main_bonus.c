@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:11:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/21 00:22:48 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:21:40 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	print_usage(char *argv)
 {
-	ft_dprintf(STDERR_FILENO, "Usage: %s infile \"cmd1\" \"cmd2\" ... outfile\n",
+	ft_dprintf(STDERR_FILENO, "Usage: \
+%s infile \"cmd1\" \"cmd2\" ... outfile\n",
 		argv);
 	ft_dprintf(STDERR_FILENO, "Usage: \
 %s here_doc  LIMITER \"cmd1\" \"cmd2\"... outfile\n", argv);
