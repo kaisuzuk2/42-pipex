@@ -6,21 +6,28 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 16:33:22 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:09:33 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // findcmd_utils_bonus.c
-int				absolute_program(char *arg);
+t_bool			is_absolute_program(char *arg);
 void			free_path(char **path);
 char			*savestring(char *str);
 
-static char	*check_absolute_program(char *arg)
+static char	*savestring_absolute_program(t_command *cmd)
 {
-	if (access(arg, F_OK))
-		return (NULL);
+	char	*arg;
+
+	arg = savestring(cmd->cmdv[0]);
+	if (!arg)
+	{
+		dispose_command(cmd);
+		sys_error(MALLOC_STR);
+		exit(EXECUTION_FAILURE);
+	}
 	return (arg);
 }
 
@@ -97,8 +104,8 @@ char	*search_for_command(t_command *cmd, char *envp[])
 	char	*full_path;
 	char	*file_to_lose_on;
 
-	if (absolute_program(cmd->cmdv[0]))
-		return (check_absolute_program(cmd->cmdv[0]));
+	if (is_absolute_program(cmd->cmdv[0]))
+		return (savestring_absolute_program(cmd));
 	path = find_variable_tempenv(envp, "PATH");
 	if (!path)
 		return (cmd->cmdv[0]);

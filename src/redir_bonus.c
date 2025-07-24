@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 23:24:43 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:17:46 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static int	here_document_to_file(char *prog_name, t_redirect *r)
 	return (free(filename), fd2);
 }
 
+// malloc, pipe, open error		:	EXECUTION_FAILUE
+// success						:	fd
 static int	here_document_to_fd(char *prog_name, t_redirect *r, char **envp)
 {
 	int		herepipe[2];
@@ -88,12 +90,12 @@ static int	do_redirection_internal(char *prog_name, t_redirect *r)
 		if (r->instruction == e_input_direction)
 		{
 			fd = open(r->filename, O_RDONLY);
-			to_fd = 0;
+			to_fd = STDIN_FILENO;
 		}
 		else
 		{
 			fd = open(r->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-			to_fd = 1;
+			to_fd = STDOUT_FILENO;
 		}
 		if (fd < 0)
 			return (internal_error(prog_name, r->filename, strerror(errno)),
@@ -120,7 +122,7 @@ int	do_redirections(char *prog_name, t_redirect *redirect, char **envp)
 		here_fd = here_document_to_fd(prog_name, redirect, envp);
 		if (here_fd == EXECUTION_FAILURE)
 			return (EXECUTION_FAILURE);
-		if (dup2(here_fd, 0) < 0)
+		if (dup2(here_fd, STDIN_FILENO) < 0)
 			return (EXECUTION_FAILURE);
 	}
 	return (EXECUTION_SUCCESS);

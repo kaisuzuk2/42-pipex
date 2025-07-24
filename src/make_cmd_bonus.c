@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:05:23 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 23:24:38 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/24 22:13:51 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*heredoc_expand(t_redirect *r, size_t *lenp, char **envp)
 {
 	if (!r->quate_flg && ft_strchr(r->document, '$'))
 		r->document = expand_string_to_string(r->document, envp);
-	if (!r->document)
+	if (r->document)
 		*lenp = ft_strlen(r->document);
 	return (r->document);
 }

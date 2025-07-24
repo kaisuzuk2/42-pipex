@@ -52,25 +52,30 @@ grep -q "command not found" err.txt && echo "✅ Test4: invalid command {wc | no
 rm -f err.txt $OUT
 
 ## 5
+$PIPEX infile "./noexistfile.sh" "cat" $OUT 2> err.txt
+grep -q "No such file or directory" err.txt && echo "✅ Test5: No exist file {./noexistfile.sh | cat}: PASS" || echo "❌ Test5: No exist file {./noexistfile.sh | cat}: FAIL"
+rm -f err.txt $OUT
+
+## 6
 echo "echo forbidden" > forbidden.sh
 chmod -x forbidden.sh
 $PIPEX infile "./forbidden.sh" "wc" $OUT 2> err.txt
-grep -q "Permission denied" err.txt && echo "✅ Test5: permission denied {./forbidden.sh | wc}: PASS" || echo "❌ Test5: permission denied {./forbidden.sh | wc}: FAIL"
+grep -q "Permission denied" err.txt && echo "✅ Test6: permission denied {./forbidden.sh | wc}: PASS" || echo "❌ Test6: permission denied {./forbidden.sh | wc}: FAIL"
 rm -f err.txt "$OUT" forbidden.sh
 
-## 6
+## 7
 echo -e "a\nb\nc" > infile
 $PIPEX infile "cat" "tr a-z A-Z" "rev" "wc -c" $OUT
 < infile cat | tr a-z A-Z | rev | wc -c > expected
-compare_output "$OUT" expected "Test6: multiple commands {cat | tr a-z A-Z | rev | wc -c}:"
+compare_output "$OUT" expected "Test7: multiple commands {cat | tr a-z A-Z | rev | wc -c}:"
 
-## 7
+## 8
 echo -e "apple\nbanana\ncherry\ndate\nelderberry\nfig\ngrape\napple\nbanana" > infile
 $PIPEX infile "cat" "tr a-z A-Z" "sort" "uniq" "rev" "tr A-Z a-z" "grep -v a" "tr e E" "cut -c1-5" "wc -l" $OUT
 < infile cat | tr a-z A-Z | sort | uniq | rev | tr A-Z a-z | grep -v a | tr e E | cut -c1-5 | wc -l > expected
-compare_output "$OUT" expected "Test7: 10 command {cat | tr a-z A-Z | sort | uniq | rev | tr A-Z a-z | grep -v a | tr e E | cut -c1-5 | wc -l}: "
+compare_output "$OUT" expected "Test8: 10 command {cat | tr a-z A-Z | sort | uniq | rev | tr A-Z a-z | grep -v a | tr e E | cut -c1-5 | wc -l}: "
 
-## 8
+## 9
 echo -e "hello world" > infile
 $PIPEX infile "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" \
 "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" \
@@ -92,23 +97,31 @@ cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat  > expected
-compare_output "$OUT" expected "Test8: 100 commands {cat | cat ... | cat}: "
+compare_output "$OUT" expected "Test9: 100 commands {cat | cat ... | cat}: "
 
-## 9 
+## 10
 echo "hello world\nhello c\nhello 42\nhello tokyo\n" > infile
 $PIPEX infile "cat" "grep \"hello world\"" $OUT
 < infile cat | grep "hello world" > expected
-compare_output "$OUT" expected "Test9: space split{cat | grep \"hello world\"}: "
+compare_output "$OUT" expected "Test10: space split{cat | grep \"hello world\"}: "
 
-## 10
+## 11
 echo "hello world" > infile
 $PIPEX infile "/bin/ls -l" "/bin/wc -l" $OUT
 if diff "$OUT" <(< infile /bin/ls -l | /bin/wc -l); then
-	echo "✅ Test10: absolute path {/bin/ls -l | /bin/wc -l}: PASS"
+	echo "✅ Test11: absolute path {/bin/ls -l | /bin/wc -l}: PASS"
 else
-	echo "❌ Test10: absolute path {/bin/ls -l | /bin/wc -l}: FAIL"
+	echo "❌ Test11: absolute path {/bin/ls -l | /bin/wc -l}: FAIL"
 fi
 rm -f infile $OUT
+
+## 12
+echo "hello world" > infile
+echo "echo this is test file" > test
+chmod +x test
+$PIPEX infile "cat" "./test" $OUT
+< infile cat | ./test > expected
+compare_output "$OUT" expected "Test12: not shell script file: "
 
 # file test
 echo "<<<<<<<<<<<<<<< file test >>>>>>>>>>>>>>>"
@@ -128,26 +141,26 @@ compare_output "$OUT" expected "Test1: redirect biginput test { cat | cat }: "
 yes "0123456789" | head -c 100000 > infile
 yes "abcdefghij" | head -c 100000 >> infile 
 $PIPEX infile "cat -e" "head -2" $OUT
-< infile cat | cat > expected
-compare_output "$OUT" expected "Test1: redirect biginput2 test { cat -e | head -2 }: "
+< infile cat -e | head -2 > expected
+compare_output "$OUT" expected "Test2: redirect biginput2 test { cat -e | head -2 }: "
 rm -f infile	
 
-##  2
+##  3
 echo "hello world" > infile
 chmod -r infile
 $PIPEX infile "cat" "cat" $OUT 2> err.txt
-grep -q "Permission denied" err.txt && echo "✅ Test2: input file permission denied: PASS" || echo "❌ Test2: input file permission denied: FAIL"
+grep -q "Permission denied" err.txt && echo "✅ Test3: input file permission denied: PASS" || echo "❌ Test3: input file permission denied: FAIL"
 rm -f err.txt infile $OUT
 
-## 3
+## 4
 echo "hello world" > infile
 touch $OUT
 chmod 000 $OUT
 $PIPEX infile "cat" "cat" $OUT 2>err.txt
-grep -q "Permission denied" err.txt && echo "✅ Test3: output file permission denied: PASS" || echo "❌ Test3: output file  permission denied: FAIL"
+grep -q "Permission denied" err.txt && echo "✅ Test4: output file permission denied: PASS" || echo "❌ Test4: output file  permission denied: FAIL"
 rm -f err.txt infile $OUT
 
-## 4
+## 5
 $PIPEX noexistfile "cat" "cat" $OUT 2>err.txt
-grep -q "No such file or directory" err.txt && echo "✅ Test4: non exist file: PASS" || echo "❌ Test4: non exist file: PASS"
+grep -q "No such file or directory" err.txt && echo "✅ Test5: non exist file: PASS" || echo "❌ Test5: non exist file: PASS"
 rm -f err.txt

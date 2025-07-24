@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 19:54:27 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/22 21:52:17 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/24 13:30:20 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ t_bool	do_piping(int pipe_in, int pipe_out)
 {
 	if (pipe_in != -1)
 	{
-		if (dup2(pipe_in, 0) < 0)
+		if (dup2(pipe_in, STDIN_FILENO) < 0)
 			return (FALSE);
 		close(pipe_in);
 	}
 	if (pipe_out != -1)
 	{
-		if (dup2(pipe_out, 1) < 0)
+		if (dup2(pipe_out, STDOUT_FILENO) < 0)
 			return (FALSE);
 		close(pipe_out);
 	}

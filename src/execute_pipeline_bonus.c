@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 22:54:39 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:17:19 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,19 @@ pid_t	wait_for(pid_t lastpid)
 static int	shell_execve(t_command *cmd, char *command, char **args,
 		char **envp)
 {
-	int	i;
+	int		i;
+	char	*re_args[3];
 
 	execve(command, args, envp);
 	i = errno;
+	if (i == ENOEXEC)
+	{
+		re_args[0] = "/bin/bash";
+		re_args[1] = command;
+		re_args[2] = NULL;
+		execve(re_args[0], re_args, envp);
+		i = errno;
+	}
 	internal_error(cmd->prog_name, command, strerror(i));
 	dispose_command(cmd->head);
 	free(command);
@@ -91,7 +100,7 @@ static pid_t	execute_simple_command(t_pipefd pipefd, t_command *cmd,
 		return (dispose_command(cmd->head), sys_error("fork error"), -1);
 	if (pid == 0)
 	{
-		if (pipefd.pipe_in == -1)
+		if (close_fd != -1)
 			close(close_fd);
 		if (!do_piping(pipefd.pipe_in, pipefd.pipe_out))
 		{
@@ -122,6 +131,7 @@ int	execute_pipeline(t_command *cmd, char *envp[])
 	pipefd.pipe_in = -1;
 	while (cur_cmd)
 	{
+		pipefd.pipe_out = -1;
 		if (cur_cmd->next)
 		{
 			if (!execute_pipe_internal(&pipefd, fildes))
@@ -129,7 +139,7 @@ int	execute_pipeline(t_command *cmd, char *envp[])
 					EXECUTION_FAILURE);
 		}
 		else
-			pipefd.pipe_out = -1;
+			fildes[0] = -1;
 		lastpid = execute_simple_command(pipefd, cur_cmd, envp, fildes[0]);
 		close_pipe(&pipefd);
 		if (cur_cmd->next)
