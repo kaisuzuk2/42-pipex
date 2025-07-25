@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/25 18:48:56 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 20:09:09 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ pid_t	wait_for(pid_t lastpid)
 		return (EXECUTION_FAILURE);
 }
 
-// NOEXECのときがどのくらいあるか確認してみよう
+// ENOEXEC		:	when no binary and shellscript, re execve
 static int	shell_execve(t_command *cmd, char *command, char **args,
 		char **envp)
 {
