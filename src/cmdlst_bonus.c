@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 22:55:14 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:51:29 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // ft_quate_split_bonus.c
 char		**command_split(char const *s, char c);
+char		*string_quote_removal(char *string);
 
 static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
 		char *filename)
@@ -33,14 +34,7 @@ static void	set_here_doc(t_redirect *r, enum e_instruction inst,
 	r->filename = NULL;
 	r->instruction = inst;
 	r->next = NULL;
-	if (ft_strchr(here_doc_eof, '\\'))
-		r->here_doc_eof = ft_strdup(here_doc_eof);
-	else if (ft_strchr(here_doc_eof, '\''))
-		r->here_doc_eof = ft_strtrim(here_doc_eof, "\'");
-	else if (ft_strchr(here_doc_eof, '\"'))
-		r->here_doc_eof = ft_strtrim(here_doc_eof, "\"");
-	else
-		r->here_doc_eof = ft_strdup(here_doc_eof);
+	r->here_doc_eof = string_quote_removal(here_doc_eof);
 	if (!r->here_doc_eof)
 	{
 		dispose_command(c);

@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/23 23:13:12 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/25 17:51:54 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ _SRCS	=	execute_pipeline_bonus.c\
 			findcmd_utils_bonus.c\
 			cmdutils_bonus.c \
 			cmdlst_bonus.c \
+			cmdlst_utils_bonus.c \
 			make_cmd_bonus.c \
 			make_cmd_utils_bonus.c \
 			dispose_cmd_bonus.c \
