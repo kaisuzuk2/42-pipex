@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/25 00:09:33 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 18:52:14 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_bool			is_absolute_program(char *arg);
 void			free_path(char **path);
 char			*savestring(char *str);
 
-static char	*savestring_absolute_program(t_command *cmd)
+static char	*savestring_command(t_command *cmd)
 {
 	char	*arg;
 
@@ -105,10 +105,10 @@ char	*search_for_command(t_command *cmd, char *envp[])
 	char	*file_to_lose_on;
 
 	if (is_absolute_program(cmd->cmdv[0]))
-		return (savestring_absolute_program(cmd));
+		return (savestring_command(cmd));
 	path = find_variable_tempenv(envp, "PATH");
 	if (!path)
-		return (cmd->cmdv[0]);
+		return (savestring_command(cmd));
 	path_list = ft_split(path, ':');
 	if (!path_list)
 	{
