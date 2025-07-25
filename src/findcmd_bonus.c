@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:03:49 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/25 18:52:14 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/25 20:51:19 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*join_path_element(char *dir, char *arg)
 	return (full_path);
 }
 
-static t_bool	file_status(char *full_path, char *file_to_lose_on,
+static t_bool	file_status(char *full_path, char **file_to_lose_on,
 		t_command *cmd)
 {
 	if (!access(full_path, F_OK))
@@ -55,8 +55,9 @@ static t_bool	file_status(char *full_path, char *file_to_lose_on,
 			return (TRUE);
 		else
 		{
-			file_to_lose_on = savestring(full_path);
-			if (!file_to_lose_on)
+			if (!*file_to_lose_on)
+				*file_to_lose_on = savestring(full_path);
+			if (!*file_to_lose_on)
 			{
 				dispose_command(cmd->head);
 				sys_error(MALLOC_STR);
@@ -69,7 +70,7 @@ static t_bool	file_status(char *full_path, char *file_to_lose_on,
 }
 
 static char	*find_user_command_in_path(t_command *cmd, char **path_list,
-		char *file_to_lose_on)
+		char **file_to_lose_on)
 {
 	char	*full_path;
 	int		i;
@@ -117,7 +118,7 @@ char	*search_for_command(t_command *cmd, char *envp[])
 		exit(EXECUTION_FAILURE);
 	}
 	file_to_lose_on = NULL;
-	full_path = find_user_command_in_path(cmd, path_list, file_to_lose_on);
+	full_path = find_user_command_in_path(cmd, path_list, &file_to_lose_on);
 	free_path(path_list);
 	if (full_path)
 		return (free(file_to_lose_on), full_path);
