@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 21:49:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/25 00:17:46 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/28 18:19:15 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	here_document_to_file(char *prog_name, t_redirect *r)
 	fd = sh_mktmpfd("sh-thd", &filename);
 	if (fd < 0)
 		return (EXECUTION_FAILURE);
-	ft_putstr_fd(r->document, fd);
+	ft_dprintf(fd, r->document);
 	free(r->document);
 	close(fd);
 	fd2 = open(filename, O_RDONLY, 0600);
@@ -72,7 +72,7 @@ static int	here_document_to_fd(char *prog_name, t_redirect *r, char **envp)
 	{
 		if (pipe(herepipe) < 0)
 			return (sys_error("cannnot here document"), EXECUTION_FAILURE);
-		ft_putstr_fd(r->document, herepipe[1]);
+		ft_dprintf(herepipe[1], r->document);
 		close(herepipe[1]);
 		return (herepipe[0]);
 	}
@@ -94,7 +94,7 @@ static int	do_redirection_internal(char *prog_name, t_redirect *r)
 		}
 		else
 		{
-			fd = open(r->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			fd = open(r->filename, r->flags, 0666);
 			to_fd = STDOUT_FILENO;
 		}
 		if (fd < 0)
@@ -114,7 +114,8 @@ int	do_redirections(char *prog_name, t_redirect *redirect, char **envp)
 	int	here_fd;
 
 	if (redirect->instruction == e_input_direction
-		|| redirect->instruction == e_output_direction)
+		|| redirect->instruction == e_output_direction
+		|| redirect->instruction == e_appending_to)
 		if (do_redirection_internal(prog_name, redirect) == EXECUTION_FAILURE)
 			return (EXECUTION_FAILURE);
 	if (redirect->instruction == e_reading_until)

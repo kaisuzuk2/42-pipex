@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/25 17:51:29 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/28 00:29:09 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 // ft_quate_split_bonus.c
 char		**command_split(char const *s, char c);
 char		*string_quote_removal(char *string);
+int			make_redirection(enum e_instruction inst);
 
 static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
 		char *filename)
@@ -23,6 +24,7 @@ static void	set_fileredirect(t_redirect *r, enum e_instruction inst,
 	r->here_doc_eof = NULL;
 	r->filename = filename;
 	r->instruction = inst;
+	r->flags = make_redirection(r->instruction);
 	r->next = NULL;
 }
 
@@ -62,7 +64,8 @@ t_command	*set_redirect(t_command *c, enum e_instruction inst,
 	r = (t_redirect *)malloc(sizeof(t_redirect));
 	if (!r)
 		return (NULL);
-	if (inst == e_output_direction || inst == e_input_direction)
+	if (inst == e_output_direction || inst == e_input_direction
+		|| inst == e_appending_to)
 		set_fileredirect(r, inst, filename_eof);
 	else if (inst == e_reading_until)
 		set_here_doc(r, inst, filename_eof, c);

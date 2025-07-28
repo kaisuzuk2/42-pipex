@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/25 20:35:37 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/28 18:16:56 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ static int	shell_execve(t_command *cmd, char *command, char **args,
 	}
 	internal_error(cmd->prog_name, command, strerror(i));
 	dispose_command(cmd->head);
-	if (!command)
-		free(command);
 	return (i);
 }
 

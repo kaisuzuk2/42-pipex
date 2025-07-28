@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 13:45:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 22:57:16 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/28 18:20:08 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,12 @@ static t_command	*last_command(char *prog_name, char *cmd, char *filename,
 	new_cmd = cmdnew(prog_name, cmd, cmd_head);
 	if (!new_cmd)
 		return (NULL);
-	if (!set_redirect(new_cmd, e_output_direction, filename))
+	if (cmd_head->redirect->instruction == e_reading_until)
+	{
+		if (!set_redirect(new_cmd, e_appending_to, filename))
+			return (NULL);
+	}
+	else if (!set_redirect(new_cmd, e_output_direction, filename))
 		return (NULL);
 	return (new_cmd);
 }

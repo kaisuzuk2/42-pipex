@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:08:48 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/23 19:26:05 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/28 00:23:08 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ enum					e_instruction
 {
 	e_output_direction,
 	e_input_direction,
-	e_reading_until
+	e_reading_until,
+	e_appending_to
 };
 
 typedef struct s_redirect
@@ -63,6 +64,7 @@ typedef struct s_redirect
 	char				*here_doc_eof;
 	int					quate_flg;
 	char				*document;
+	int					flags;
 }						t_redirect;
 
 typedef struct s_command
