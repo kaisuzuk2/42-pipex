@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/25 17:51:54 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/28 22:07:54 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ _SRCS	=	execute_pipeline_bonus.c\
 			ft_mkstemp_bonus.c \
 			command_split_bonus.c \
 			command_split_utils_bonus.c \
-			parse_bonus.c\
 			parse_utils_bonus.c\
 			redir_bonus.c\
 			findcmd_bonus.c \
@@ -34,10 +33,15 @@ _SRCS	=	execute_pipeline_bonus.c\
 			make_cmd_utils_bonus.c \
 			dispose_cmd_bonus.c \
 			error_bonus.c 
+_M_SRCS	=	parse.c
+_B_SRCS	=	parse_bonus.c
 			
-SRCS	=	$(addprefix src/, $(_SRCS))
-OBJS	=	$(SRCS:.c=.o)
-MAIN	=	main_bonus.c
+M_SRCS	=	$(addprefix src/, $(_SRCS) $(_M_SRCS))
+B_SRCS	=	$(addprefix src/, $(_SRCS) $(_B_SRCS))
+M_OBJS	=	$(M_SRCS:.c=.o)
+B_OBJS	=	$(B_SRCS:.c=.o)
+MAIN	=	main.c
+B_MAIN	=	main_bonus.c
 
 FT_NAME	=	libftprintf
 FT_URL	=	https://github.com/kaisuzuk2/ft_dprintf.git
@@ -51,14 +55,27 @@ INC		+=	-I$(GNL_NAME)
 MAKE	=	make -C
 RM		=	rm -rf
 
-all: bonus
+# all: bonus
 
-bonus: $(NAME)
+# bonus: $(NAME)
 
-$(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
+# $(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
+# 	$(MAKE) $(FT_NAME)
+# 	$(MAKE) $(GNL_NAME)
+# 	$(CC) -o $(NAME) $(FLAG) -g $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	
+
+all: $(NAME)
+
+$(NAME): $(FT_NAME) $(GNL_NAME) $(M_OBJS) $(MAIN)
 	$(MAKE) $(FT_NAME)
 	$(MAKE) $(GNL_NAME)
-	$(CC) -o $(NAME) $(FLAG) -g $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(M_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+
+bonus: $(B_OBJS) $(FT_NAME) $(GNL_NAME) $(B_MAIN) $(NAME)
+	$(RM) $(NAME)
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(B_MAIN) $(B_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	
 	
 
 %.o: %.c
@@ -67,7 +84,8 @@ $(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
 clean: 
 	$(RM) $(FT_NAME)
 	$(RM) $(GNL_NAME)
-	$(RM) $(OBJS)
+	$(RM) $(M_OBJS)
+	$(RM) $(B_OBJS)
 
 fclean: clean
 	$(RM) $(NAME)

@@ -6,14 +6,14 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:04:31 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/28 00:29:09 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/28 22:57:02 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // ft_quate_split_bonus.c
-char		**command_split(char const *s, char c);
+char		**command_split(char const *s);
 char		*string_quote_removal(char *string);
 int			make_redirection(enum e_instruction inst);
 
@@ -84,7 +84,7 @@ t_command	*cmdnew(char *prog_name, char *cmds, t_command *cmd_head)
 	if (!c)
 		return (NULL);
 	c->prog_name = prog_name;
-	cmdv = command_split(cmds, ' ');
+	cmdv = command_split(cmds);
 	if (!cmdv)
 		return (NULL);
 	c->cmdv = cmdv;

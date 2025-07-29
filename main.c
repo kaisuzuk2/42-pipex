@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/29 16:11:09 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/28 21:32:13 by kaisuzuk         ###   ########.fr       */
+/*   Created: 2025/07/28 21:30:22 by kaisuzuk          #+#    #+#             */
+/*   Updated: 2025/07/28 21:52:36 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,15 @@
 void	print_usage(char *argv)
 {
 	ft_dprintf(STDERR_FILENO, "Usage: \
-%s infile \"cmd1\" \"cmd2\" ... outfile\n",
+%s infile \"cmd1\" \"cmd2\"  outfile\n",
 		argv);
-	ft_dprintf(STDERR_FILENO, "Usage: \
-%s here_doc  LIMITER \"cmd1\" \"cmd2\"... outfile\n", argv);
+}
+
+t_bool args_check_mandatory(int argc)
+{
+	if (argc != 5)
+		return (FALSE);
+	return (TRUE);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -26,7 +31,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_command	*cmd;
 	int			res;
 
-	if (!args_check(argc, argv))
+	if (!args_check_mandatory(argc))
 	{
 		print_usage(argv[0]);
 		return (EXECUTION_FAILURE);

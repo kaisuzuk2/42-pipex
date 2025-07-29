@@ -6,11 +6,22 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 14:05:07 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/28 18:16:56 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:06:33 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+/*
+1) fork ()
+2) connect pipes
+3) look up the command
+4) do redirections
+5) execve ()
+6) If the execve failed, see if the file has executable mode set.
+   If so, and it isn't a directory, then execute its contents as
+   a shell script.
+*/
 
 // execute_pipeline_utils_bonus.c
 t_bool			do_piping(int pipe_in, int pipe_out);
