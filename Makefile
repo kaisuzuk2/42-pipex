@@ -6,11 +6,12 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/28 22:07:54 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/30 13:42:17 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	pipex
+B_NAME	=	pipex_bonus
 CC		=	cc
 FLAG	=	-Wall -Werror -Wextra
 INC		=	-Iincludes
@@ -55,28 +56,38 @@ INC		+=	-I$(GNL_NAME)
 MAKE	=	make -C
 RM		=	rm -rf
 
-# all: bonus
+# all: $(NAME)
 
-# bonus: $(NAME)
-
-# $(NAME): $(FT_NAME) $(GNL_NAME) $(OBJS) $(MAIN)
+# $(NAME): $(FT_NAME) $(GNL_NAME) $(M_OBJS) $(MAIN)
+# 	$(RM) $(NAME)
 # 	$(MAKE) $(FT_NAME)
 # 	$(MAKE) $(GNL_NAME)
-# 	$(CC) -o $(NAME) $(FLAG) -g $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
-	
+# 	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(M_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 
-all: $(NAME)
+# bonus: $(B_NAME)
 
-$(NAME): $(FT_NAME) $(GNL_NAME) $(M_OBJS) $(MAIN)
+# $(B_NAME): $(FT_NAME) $(GNL_NAME) $(B_OBJS) $(B_MAIN)
+# 	$(RM) $(NAME)
+# 	$(RM) $(B_NAME)
+# 	$(MAKE) $(FT_NAME)
+# 	$(MAKE) $(GNL_NAME)
+# 	$(CC) -o $(B_NAME) $(FLAG) $(INC) $(B_MAIN) $(B_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+# 	cp $(B_NAME) $(NAME)
+
+ifeq ($(MAKECMDGOALS), bonus)
+	OBJS = $(B_OBJS)
+else
+	OBJS = $(M_OBJS)
+endif 
+
+all: $(FT_NAME) $(GNL_NAME) $(NAME)
+
+$(NAME): $(OBJS)
 	$(MAKE) $(FT_NAME)
 	$(MAKE) $(GNL_NAME)
-	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(M_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 
-bonus: $(B_OBJS) $(FT_NAME) $(GNL_NAME) $(B_MAIN) $(NAME)
-	$(RM) $(NAME)
-	$(CC) -o $(NAME) $(FLAG) $(INC) $(B_MAIN) $(B_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
-	
-	
+bonus: all
 
 %.o: %.c
 	$(CC) -c $(FLAG) -g $(INC) $< -o $@
@@ -89,6 +100,7 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) $(B_NAME)
 
 re: fclean all
 
