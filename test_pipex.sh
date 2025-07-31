@@ -42,12 +42,12 @@ $PIPEX infile "grep a" "tr a A" $OUT
 compare_output "$OUT" expected "Test2: nomal test {grep | tr}"
 
 ## 3
-echo "hello world";
-$PIPEX infile "cat	-e" "ls"  infile
-< infile cat	-e | cat	-e > expected
-compare_output "$OUT" expected "Test3: tab test {cat	-e | ls}"
+echo "hello\nworld\nthis\nis\na\n\pen" > infile
+$PIPEX infile "cat		-e" "wc		-l"  $OUT
+< infile cat	-e | wc		-l > expected
+compare_output "$OUT" expected "Test3: tab test {cat	-e | wc		-l}"
 
-## 3
+## 4
 $PIPEX infile "noexistcommand" "wc" $OUT 2> err.txt
 grep -q "command not found" err.txt && echo "✅ Test4: invalid command {noexistcommand | wc}: PASS" || echo "❌ Test4: invalid command {noexistcommand | wc}: FAIL"
 rm -f err.txt "$OUT"
@@ -58,30 +58,42 @@ grep -q "command not found" err.txt && echo "✅ Test5: invalid command {wc | no
 rm -f err.txt $OUT
 
 ## 6
-$PIPEX infile "./noexistfile.sh" "cat" $OUT 2> err.txt
-grep -q "No such file or directory" err.txt && echo "✅ Test6: No exist file {./noexistfile.sh | cat}: PASS" || echo "❌ Test6: No exist file {./noexistfile.sh | cat}: FAIL"
-rm -f err.txt $OUT
+<< EOF > test.sh
+#!/bin/bash
+echo "hello world"
+EOF
+chmod +x test.sh
+echo "this is infile" > infile
+$PIPEX infile "./test.sh" "cat" $OUT
+< infile ./test.sh | cat > expected
+compare_output "$OUT" expected "Test6: shell script {./test.sh | cat}"
+rm -rf test.sh
 
 ## 7
+$PIPEX infile "./noexistfile.sh" "cat" $OUT 2> err.txt
+grep -q "No such file or directory" err.txt && echo "✅ Test7: No exist file {./noexistfile.sh | cat}: PASS" || echo "❌ Test7: No exist file {./noexistfile.sh | cat}: FAIL"
+rm -f err.txt $OUT
+
+## 8
 echo "echo forbidden" > forbidden.sh
 chmod -x forbidden.sh
 $PIPEX infile "./forbidden.sh" "wc" $OUT 2> err.txt
-grep -q "Permission denied" err.txt && echo "✅ Test7: permission denied {./forbidden.sh | wc}: PASS" || echo "❌ Test7: permission denied {./forbidden.sh | wc}: FAIL"
+grep -q "Permission denied" err.txt && echo "✅ Test8: permission denied {./forbidden.sh | wc}: PASS" || echo "❌ Test8: permission denied {./forbidden.sh | wc}: FAIL"
 rm -f err.txt "$OUT" forbidden.sh
 
-## 8
+## 9
 echo -e "a\nb\nc" > infile
 $PIPEX infile "cat" "tr a-z A-Z" "rev" "wc -c" $OUT
 < infile cat | tr a-z A-Z | rev | wc -c > expected
-compare_output "$OUT" expected "Test8: multiple commands {cat | tr a-z A-Z | rev | wc -c}:"
+compare_output "$OUT" expected "Test9: multiple commands {cat | tr a-z A-Z | rev | wc -c}:"
 
-## 9
+## 10
 echo -e "apple\nbanana\ncherry\ndate\nelderberry\nfig\ngrape\napple\nbanana" > infile
 $PIPEX infile "cat" "tr a-z A-Z" "sort" "uniq" "rev" "tr A-Z a-z" "grep -v a" "tr e E" "cut -c1-5" "wc -l" $OUT
 < infile cat | tr a-z A-Z | sort | uniq | rev | tr A-Z a-z | grep -v a | tr e E | cut -c1-5 | wc -l > expected
-compare_output "$OUT" expected "Test9: 10 command {cat | tr a-z A-Z | sort | uniq | rev | tr A-Z a-z | grep -v a | tr e E | cut -c1-5 | wc -l}: "
+compare_output "$OUT" expected "Test10: 10 command {cat | tr a-z A-Z | sort | uniq | rev | tr A-Z a-z | grep -v a | tr e E | cut -c1-5 | wc -l}: "
 
-## 10
+## 11
 echo -e "hello world" > infile
 $PIPEX infile "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" \
 "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" "cat" \
@@ -103,31 +115,32 @@ cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat |\
 cat | cat | cat | cat | cat | cat | cat | cat | cat | cat  > expected
-compare_output "$OUT" expected "Test10: 100 commands {cat | cat ... | cat}: "
+compare_output "$OUT" expected "Test11: 100 commands {cat | cat ... | cat}: "
 
-## 11
+## 12
 echo "hello world\nhello c\nhello 42\nhello tokyo\n" > infile
 $PIPEX infile "cat" "grep \"hello world\"" $OUT
 < infile cat | grep "hello world" > expected
-compare_output "$OUT" expected "Test11: space split{cat | grep \"hello world\"}: "
+compare_output "$OUT" expected "Test12: space split{cat | grep \"hello world\"}: "
 
-## 12
+## 13
 echo "hello world" > infile
 $PIPEX infile "/bin/ls -l" "/bin/wc -l" $OUT
 if diff "$OUT" <(< infile /bin/ls -l | /bin/wc -l); then
-	echo "✅ Test12: absolute path {/bin/ls -l | /bin/wc -l}: PASS"
+	echo "✅ Test13: absolute path {/bin/ls -l | /bin/wc -l}: PASS"
 else
-	echo "❌ Test12: absolute path {/bin/ls -l | /bin/wc -l}: FAIL"
+	echo "❌ Test13: absolute path {/bin/ls -l | /bin/wc -l}: FAIL"
 fi
 rm -f infile $OUT
 
-## 13
+## 14
 echo "hello world" > infile
 echo "echo this is test file" > test
 chmod +x test
 $PIPEX infile "cat" "./test" $OUT
 < infile cat | ./test > expected
-compare_output "$OUT" expected "Test13: not shell script file: "
+compare_output "$OUT" expected "Test14: not shell script file: "
+rm -rf test
 
 # file test
 echo "<<<<<<<<<<<<<<< file test >>>>>>>>>>>>>>>"

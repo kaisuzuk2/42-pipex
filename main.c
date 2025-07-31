@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:30:22 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/30 13:43:32 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/31 19:15:26 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 void	print_usage(char *argv)
 {
-	ft_dprintf(STDERR_FILENO, "Usage: \
-%s infile \"cmd1\" \"cmd2\"  outfile\n",
+	ft_dprintf(STDERR_FILENO, "Usage: %s infile \"cmd1\" \"cmd2\"  outfile\n", \
 		argv);
 }
 
-t_bool args_check_mandatory(int argc)
+t_bool	args_check_mandatory(int argc)
 {
 	if (argc != 5)
 		return (FALSE);

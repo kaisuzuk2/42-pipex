@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/30 13:42:17 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/31 00:30:55 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,12 +37,15 @@ _SRCS	=	execute_pipeline_bonus.c\
 _M_SRCS	=	parse.c
 _B_SRCS	=	parse_bonus.c
 			
-M_SRCS	=	$(addprefix src/, $(_SRCS) $(_M_SRCS))
-B_SRCS	=	$(addprefix src/, $(_SRCS) $(_B_SRCS))
-M_OBJS	=	$(M_SRCS:.c=.o)
-B_OBJS	=	$(B_SRCS:.c=.o)
 MAIN	=	main.c
 B_MAIN	=	main_bonus.c
+
+M_SRCS	=	$(addprefix src/, $(_SRCS) $(_M_SRCS)) \
+			$(MAIN)
+B_SRCS	=	$(addprefix src/, $(_SRCS) $(_B_SRCS)) \
+			$(B_MAIN)
+M_OBJS	=	$(M_SRCS:.c=.o)
+B_OBJS	=	$(B_SRCS:.c=.o)
 
 FT_NAME	=	libftprintf
 FT_URL	=	https://github.com/kaisuzuk2/ft_dprintf.git
@@ -85,7 +88,7 @@ all: $(FT_NAME) $(GNL_NAME) $(NAME)
 $(NAME): $(OBJS)
 	$(MAKE) $(FT_NAME)
 	$(MAKE) $(GNL_NAME)
-	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
+	$(CC) -o $(NAME) $(FLAG) $(INC) $(OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
 
 bonus: all
 

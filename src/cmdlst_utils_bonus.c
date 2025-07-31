@@ -6,7 +6,7 @@
 /*   By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:05:19 by kaisuzuk          #+#    #+#             */
-/*   Updated: 2025/07/28 00:33:11 by kaisuzuk         ###   ########.fr       */
+/*   Updated: 2025/07/31 19:16:52 by kaisuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ char	*string_quote_removal(char *string)
 	return (ft_strtrim(string, set));
 }
 
-// あとはファイルの権限をどうするかだね
-int make_redirection(enum e_instruction inst)
+int	make_redirection(enum e_instruction inst)
 {
 	if (inst == e_input_direction)
 		return (O_RDONLY);
@@ -42,5 +41,4 @@ int make_redirection(enum e_instruction inst)
 		return (O_APPEND | O_WRONLY | O_CREAT);
 	else
 		return (0);
-		
 }
