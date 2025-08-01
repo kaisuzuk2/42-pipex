@@ -6,7 +6,7 @@
 #    By: kaisuzuk <kaisuzuk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/29 16:00:23 by kaisuzuk          #+#    #+#              #
-#    Updated: 2025/07/31 00:30:55 by kaisuzuk         ###   ########.fr        #
+#    Updated: 2025/07/31 19:43:07 by kaisuzuk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,24 +58,6 @@ INC		+=	-I$(GNL_NAME)
 
 MAKE	=	make -C
 RM		=	rm -rf
-
-# all: $(NAME)
-
-# $(NAME): $(FT_NAME) $(GNL_NAME) $(M_OBJS) $(MAIN)
-# 	$(RM) $(NAME)
-# 	$(MAKE) $(FT_NAME)
-# 	$(MAKE) $(GNL_NAME)
-# 	$(CC) -o $(NAME) $(FLAG) $(INC) $(MAIN) $(M_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
-
-# bonus: $(B_NAME)
-
-# $(B_NAME): $(FT_NAME) $(GNL_NAME) $(B_OBJS) $(B_MAIN)
-# 	$(RM) $(NAME)
-# 	$(RM) $(B_NAME)
-# 	$(MAKE) $(FT_NAME)
-# 	$(MAKE) $(GNL_NAME)
-# 	$(CC) -o $(B_NAME) $(FLAG) $(INC) $(B_MAIN) $(B_OBJS) -L$(FT_NAME) -lftprintf -L$(GNL_NAME) -lgnl
-# 	cp $(B_NAME) $(NAME)
 
 ifeq ($(MAKECMDGOALS), bonus)
 	OBJS = $(B_OBJS)
